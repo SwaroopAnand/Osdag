@@ -5,15 +5,15 @@ Commenced on 16-02-2018
 """""
 
 import numpy
+import copy
 
 
 class CADFillet(object):
 
     def __init__(self, beamLeft, beamRight, plateLeft, plateRight, nut_bolt_array,
-                 bbWeldAbvFlang_11, bbWeldAbvFlang_12, bbWeldAbvFlang_21, bbWeldAbvFlang_22,
-                 bbWeldBelwFlang_11, bbWeldBelwFlang_12, bbWeldBelwFlang_13, bbWeldBelwFlang_14,
-                 bbWeldBelwFlang_21, bbWeldBelwFlang_22, bbWeldBelwFlang_23, bbWeldBelwFlang_24,
-                 bbWeldSideWeb_11, bbWeldSideWeb_12, bbWeldSideWeb_21, bbWeldSideWeb_22,
+                 bbWeldAbvFlang,
+                 bbWeldBelwFlang,
+                 bbWeldSideWeb,
                  bbWeldstiff1_u1, bbWeldstiff1_u2, bbWeldstiff2_u1, bbWeldstiff2_u2, bbWeldstiff3_u1,
                  bbWeldstiff3_u2, bbWeldstiff4_u1, bbWeldstiff4_u2,
                  bbWeldstiff1_l1, bbWeldstiff1_l2, bbWeldstiff2_l1, bbWeldstiff2_l2, bbWeldstiff3_l1,
@@ -22,7 +22,7 @@ class CADFillet(object):
                  bbWeldStiffLL_1, bbWeldStiffLL_2, bbWeldStiffLL_3, bbWeldStiffLL_4,
                  bbWeldStiffHR_1, bbWeldStiffHR_2, bbWeldStiffHR_3, bbWeldStiffHR_4,
                  bbWeldStiffLR_1, bbWeldStiffLR_2, bbWeldStiffLR_3, bbWeldStiffLR_4,
-                 beam_stiffener_1, beam_stiffener_2, beam_stiffener_3,beam_stiffener_4,
+                 beam_stiffeners,
                  beam_stiffener_F1,beam_stiffener_F2,beam_stiffener_F3,beam_stiffener_F4,alist, outputobj):
 
         # Initializing the arguments
@@ -31,14 +31,10 @@ class CADFillet(object):
         self.plateLeft = plateLeft
         self.plateRight = plateRight
         self.nut_bolt_array = nut_bolt_array
-        self.beamLModel = None
-        self.beamRModel = None
-        self.plateLModel = None
-        self.plateRModel = None
-        self.beam_stiffener_1 = beam_stiffener_1
-        self.beam_stiffener_2 = beam_stiffener_2
-        self.beam_stiffener_3 = beam_stiffener_3
-        self.beam_stiffener_4 = beam_stiffener_4
+        self.beam_stiffener_1 = beam_stiffeners
+        self.beam_stiffener_2 = copy.deepcopy(beam_stiffeners)
+        self.beam_stiffener_3 = copy.deepcopy(beam_stiffeners)
+        self.beam_stiffener_4 = copy.deepcopy(beam_stiffeners)
 
         self.beam_stiffener_F1 = beam_stiffener_F1
         self.beam_stiffener_F2 = beam_stiffener_F2
@@ -47,6 +43,12 @@ class CADFillet(object):
         self.alist = alist
         self.outputobj = outputobj
         self.boltProjection = float(outputobj['Plate']['Projection'])
+        self.beamLModel = None
+        self.beamRModel = None
+        self.plateLModel = None
+        self.plateRModel = None
+
+
         if alist["Member"]["Connectivity"] == "Flush":
             self.loc = float(outputobj['Stiffener']['Location'])
 
@@ -77,25 +79,25 @@ class CADFillet(object):
 
 
         # Weld above flange for left and right beam
-        self.bbWeldAbvFlang_11 = bbWeldAbvFlang_11      # Left beam upper side
-        self.bbWeldAbvFlang_12 = bbWeldAbvFlang_12      # Left beam lower side
-        self.bbWeldAbvFlang_21 = bbWeldAbvFlang_21      # Right beam upper side
-        self.bbWeldAbvFlang_22 = bbWeldAbvFlang_22      # Right beam lower side
+        self.bbWeldAbvFlang_11 = copy.deepcopy(bbWeldAbvFlang)    # Left beam upper side
+        self.bbWeldAbvFlang_12 = copy.deepcopy(bbWeldAbvFlang)      # Left beam lower side
+        self.bbWeldAbvFlang_21 = copy.deepcopy(bbWeldAbvFlang)     # Right beam upper side
+        self.bbWeldAbvFlang_22 = copy.deepcopy(bbWeldAbvFlang)      # Right beam lower side
 
-        self.bbWeldBelwFlang_11 = bbWeldBelwFlang_11    # Left beam, upper, left
-        self.bbWeldBelwFlang_12 = bbWeldBelwFlang_12    # Left beam, upper, right
-        self.bbWeldBelwFlang_13 = bbWeldBelwFlang_13    # Left beam, lower, left
-        self.bbWeldBelwFlang_14 = bbWeldBelwFlang_14    # Left beam, lower, right
-        self.bbWeldBelwFlang_21 = bbWeldBelwFlang_21    # behind bbWeldBelwFlang_11
-        self.bbWeldBelwFlang_22 = bbWeldBelwFlang_22    # behind bbWeldBelwFlang_12
-        self.bbWeldBelwFlang_23 = bbWeldBelwFlang_23    # behind bbWeldBelwFlang_13
-        self.bbWeldBelwFlang_24 = bbWeldBelwFlang_24    # behind bbWeldBelwFlang_14
+        self.bbWeldBelwFlang_11 = copy.deepcopy(bbWeldBelwFlang)    # Left beam, upper, left
+        self.bbWeldBelwFlang_12 = copy.deepcopy(bbWeldBelwFlang)    # Left beam, upper, right
+        self.bbWeldBelwFlang_13 = copy.deepcopy(bbWeldBelwFlang)    # Left beam, lower, left
+        self.bbWeldBelwFlang_14 = copy.deepcopy(bbWeldBelwFlang)    # Left beam, lower, right
+        self.bbWeldBelwFlang_21 = copy.deepcopy(bbWeldBelwFlang)    # behind bbWeldBelwFlang_11
+        self.bbWeldBelwFlang_22 = copy.deepcopy(bbWeldBelwFlang)    # behind bbWeldBelwFlang_12
+        self.bbWeldBelwFlang_23 = copy.deepcopy(bbWeldBelwFlang)    # behind bbWeldBelwFlang_13
+        self.bbWeldBelwFlang_24 = copy.deepcopy(bbWeldBelwFlang)    # behind bbWeldBelwFlang_14
 
 
-        self.bbWeldSideWeb_11 = bbWeldSideWeb_11        # Left beam, left of Web
-        self.bbWeldSideWeb_12 = bbWeldSideWeb_12        # Left beam, right of Web
-        self.bbWeldSideWeb_21 = bbWeldSideWeb_21        # Behind bbWeldSideWeb_11
-        self.bbWeldSideWeb_22 = bbWeldSideWeb_22        # Behind bbWeldSideWeb_12
+        self.bbWeldSideWeb_11 = copy.deepcopy(bbWeldSideWeb)        # Left beam, left of Web
+        self.bbWeldSideWeb_12 = copy.deepcopy(bbWeldSideWeb)        # Left beam, right of Web
+        self.bbWeldSideWeb_21 = copy.deepcopy(bbWeldSideWeb)       # Behind bbWeldSideWeb_11
+        self.bbWeldSideWeb_22 = copy.deepcopy(bbWeldSideWeb)        # Behind bbWeldSideWeb_12
 
         self.bbWeldStiffHL_1 = bbWeldStiffHL_1
         self.bbWeldStiffHL_2 = bbWeldStiffHL_2
@@ -147,35 +149,19 @@ class CADFillet(object):
         self.createPlateLGeometry()
         self.createPlateRGeometry()
         self.create_nut_bolt_array()
-        self.createbeam_stiffener_1Geometry()
-        self.createbeam_stiffener_2Geometry()
-        self.createbeam_stiffener_3Geometry()
-        self.createbeam_stiffener_4Geometry()
+        self.createbeam_stiffenersGeometry()
 
         self.createbeam_stiffener_F1Geometry()
         self.createbeam_stiffener_F2Geometry()
         self.createbeam_stiffener_F3Geometry()
         self.createbeam_stiffener_F4Geometry()
 
-        self.create_bbWeldAbvFlang_11()
-        self.create_bbWeldAbvFlang_12()
-        self.create_bbWeldAbvFlang_21()
-        self.create_bbWeldAbvFlang_22()
+        self.create_bbWeldAbvFlang()
 
-        self.create_bbWeldBelwFlang_11()
-        self.create_bbWeldBelwFlang_12()
-        self.create_bbWeldBelwFlang_13()
-        self.create_bbWeldBelwFlang_14()
-        self.create_bbWeldBelwFlang_21()
-        self.create_bbWeldBelwFlang_22()
-        self.create_bbWeldBelwFlang_23()
-        self.create_bbWeldBelwFlang_24()
+        self.create_bbWeldBelwFlang()
 
 
-        self.create_bbWeldSideWeb_11()
-        self.create_bbWeldSideWeb_12()
-        self.create_bbWeldSideWeb_21()
-        self.create_bbWeldSideWeb_22()
+        self.create_bbWeldSideWeb()
 
         self.create_bbWeldStiffHL_1()
         self.create_bbWeldStiffHL_2()
@@ -349,7 +335,7 @@ class CADFillet(object):
         boltDir = numpy.array([0, 1.0, 0])
         self.nut_bolt_array.place(nutboltArrayOrigin, gaugeDir, pitchDir, boltDir)
 
-    def createbeam_stiffener_1Geometry(self):
+    def createbeam_stiffenersGeometry(self):
         gap = self.beamLeft.length + self.plateLeft.T + self.plateRight.T + self.beam_stiffener_1.L / 2
         stiffenerOrigin1 = numpy.array([-self.beam_stiffener_1.T / 2, gap,
                                          self.beamRight.D / 2 + self.beam_stiffener_1.W / 2])
@@ -357,7 +343,6 @@ class CADFillet(object):
         stiffener1_wDir = numpy.array([1.0, 0.0, 0.0])
         self.beam_stiffener_1.place(stiffenerOrigin1, stiffener1_uDir, stiffener1_wDir)
 
-    def createbeam_stiffener_2Geometry(self):
         gap = self.beamLeft.length + self.plateLeft.T +  self.plateRight.T+ self.beam_stiffener_1.L / 2
         stiffenerOrigin2 = numpy.array([self.beam_stiffener_1.T / 2, gap,
                                          - self.beamRight.D / 2 - self.beam_stiffener_1.W / 2])
@@ -365,7 +350,6 @@ class CADFillet(object):
         stiffener2_wDir = numpy.array([-1.0, 0.0, 0.0])
         self.beam_stiffener_2.place(stiffenerOrigin2, stiffener2_uDir, stiffener2_wDir)
 
-    def createbeam_stiffener_3Geometry(self):
         gap = self.beamLeft.length - self.beam_stiffener_1.L / 2
         stiffenerOrigin3 = numpy.array([self.beam_stiffener_1.T / 2, gap,
                                          self.beamRight.D / 2 + self.beam_stiffener_1.W / 2])
@@ -373,7 +357,6 @@ class CADFillet(object):
         stiffener3_wDir = numpy.array([-1.0, 0.0, 0.0])
         self.beam_stiffener_3.place(stiffenerOrigin3, stiffener3_uDir, stiffener3_wDir)
 
-    def createbeam_stiffener_4Geometry(self):
         gap = self.beamLeft.length - self.beam_stiffener_1.L / 2
         stiffenerOrigin4 = numpy.array([-self.beam_stiffener_1.T / 2, gap,
                                          - self.beamRight.D / 2 - self.beam_stiffener_1.W / 2])
@@ -414,101 +397,88 @@ class CADFillet(object):
         stiffenerF4_wDir = numpy.array([0.0, 0.0, -1.0])
         self.beam_stiffener_F4.place(stiffenerOriginF4, stiffenerF4_uDir, stiffenerF4_wDir)
 
-    def create_bbWeldAbvFlang_11(self):
+    def create_bbWeldAbvFlang(self):
         weldAbvFlangOrigin_11 = numpy.array([self.beamLeft.B / 2, self.beamLeft.length, self.beamLeft.D / 2])
         uDirAbv_11 = numpy.array([0, -1.0, 0])
         wDirAbv_11 = numpy.array([-1.0, 0, 0])
         self.bbWeldAbvFlang_11.place(weldAbvFlangOrigin_11, uDirAbv_11, wDirAbv_11)
 
-    def create_bbWeldAbvFlang_12(self):
         weldAbvFlangOrigin_12 = numpy.array([-self.beamLeft.B / 2, self.beamLeft.length, -self.beamLeft.D / 2])
         uDirAbv_12 = numpy.array([0, -1.0, 0])
         wDirAbv_12 = numpy.array([1.0, 0, 0])
         self.bbWeldAbvFlang_12.place(weldAbvFlangOrigin_12, uDirAbv_12, wDirAbv_12)
 
-    def create_bbWeldAbvFlang_21(self):
         weldAbvFlangOrigin_21 = numpy.array([-self.beamLeft.B / 2, self.beamLeft.length + 2 * self.plateLeft.T, self.beamLeft.D / 2])
         uDirAbv_21 = numpy.array([0, 1.0, 0])
         wDirAbv_21 = numpy.array([1.0, 0, 0])
         self.bbWeldAbvFlang_21.place(weldAbvFlangOrigin_21, uDirAbv_21, wDirAbv_21)
 
-    def create_bbWeldAbvFlang_22(self):
         weldAbvFlangOrigin_22 = numpy.array([self.beamLeft.B / 2, self.beamLeft.length + 2 * self.plateLeft.T, -self.beamLeft.D / 2])
         uDirAbv_22 = numpy.array([0, 1.0, 0])
         wDirAbv_22 = numpy.array([-1.0, 0, 0])
         self.bbWeldAbvFlang_22.place(weldAbvFlangOrigin_22, uDirAbv_22, wDirAbv_22)
 
-    def create_bbWeldBelwFlang_11(self):
+    def create_bbWeldBelwFlang(self):
         weldBelwFlangOrigin_11 = numpy.array([self.beamLeft.R2 -self.beamLeft.B / 2, self.beamLeft.length, (self.beamLeft.D / 2) - self.beamLeft.T])
         uDirBelw_11 = numpy.array([0, -1.0, 0])
         wDirBelw_11 = numpy.array([1.0, 0, 0])
         self.bbWeldBelwFlang_11.place(weldBelwFlangOrigin_11, uDirBelw_11, wDirBelw_11)
 
-    def create_bbWeldBelwFlang_12(self):
         weldBelwFlangOrigin_12 = numpy.array([self.beamLeft.R1 + self.beamLeft.t / 2, self.beamLeft.length, (self.beamLeft.D / 2) - self.beamLeft.T])
         uDirBelw_12 = numpy.array([0, -1.0, 0])
         wDirBelw_12 = numpy.array([1.0, 0, 0])
         self.bbWeldBelwFlang_12.place(weldBelwFlangOrigin_12, uDirBelw_12, wDirBelw_12)
 
-    def create_bbWeldBelwFlang_13(self):
         weldBelwFlangOrigin_13 = numpy.array([-self.beamLeft.R1-self.beamLeft.t / 2, self.beamLeft.length, -(self.beamLeft.D / 2) + self.beamLeft.T])
         uDirBelw_13 = numpy.array([0, -1.0, 0])
         wDirBelw_13 = numpy.array([-1.0, 0, 0])
         self.bbWeldBelwFlang_13.place(weldBelwFlangOrigin_13, uDirBelw_13, wDirBelw_13)
 
-    def create_bbWeldBelwFlang_14(self):
         weldBelwFlangOrigin_14 = numpy.array([-self.beamLeft.R2+self.beamLeft.B / 2, self.beamLeft.length, -(self.beamLeft.D / 2) + self.beamLeft.T])
         uDirBelw_14 = numpy.array([0, -1.0, 0])
         wDirBelw_14 = numpy.array([-1.0, 0, 0])
         self.bbWeldBelwFlang_14.place(weldBelwFlangOrigin_14, uDirBelw_14, wDirBelw_14)
 
-    def create_bbWeldBelwFlang_21(self):
         weldBelwFlangOrigin_21 = numpy.array([-self.beamLeft.R1-self.beamLeft.t / 2, self.beamLeft.length + 2 * self.plateLeft.T, (self.beamLeft.D / 2) -
                                               self.beamLeft.T])
         uDirBelw_21 = numpy.array([0, 1.0, 0])
         wDirBelw_21 = numpy.array([-1.0, 0, 0])
         self.bbWeldBelwFlang_21.place(weldBelwFlangOrigin_21, uDirBelw_21, wDirBelw_21)
 
-    def create_bbWeldBelwFlang_22(self):
         weldBelwFlangOrigin_22 = numpy.array([-self.beamLeft.R2+self.beamLeft.B / 2, self.beamLeft.length + 2 * self.plateLeft.T, (self.beamLeft.D / 2) -
                                               self.beamLeft.T])
         uDirBelw_22 = numpy.array([0, 1.0, 0])
         wDirBelw_22 = numpy.array([-1.0, 0, 0])
         self.bbWeldBelwFlang_22.place(weldBelwFlangOrigin_22, uDirBelw_22, wDirBelw_22)
 
-    def create_bbWeldBelwFlang_23(self):
         weldBelwFlangOrigin_23 = numpy.array([self.beamLeft.R2-self.beamLeft.B / 2, self.beamLeft.length + 2 * self.plateLeft.T, -(self.beamLeft.D / 2) +
                                               self.beamLeft.T])
         uDirBelw_23 = numpy.array([0, 1.0, 0])
         wDirBelw_23 = numpy.array([1.0, 0, 0])
         self.bbWeldBelwFlang_23.place(weldBelwFlangOrigin_23, uDirBelw_23, wDirBelw_23)
 
-    def create_bbWeldBelwFlang_24(self):
         weldBelwFlangOrigin_24 = numpy.array([self.beamLeft.R1+self.beamLeft.t / 2, self.beamLeft.length + 2 * self.plateLeft.T, -(self.beamLeft.D / 2) +
                                               self.beamLeft.T])
         uDirBelw_24 = numpy.array([0, 1.0, 0])
         wDirBelw_24 = numpy.array([1.0, 0, 0])
         self.bbWeldBelwFlang_24.place(weldBelwFlangOrigin_24, uDirBelw_24, wDirBelw_24)
 
-    def create_bbWeldSideWeb_11(self):
+    def create_bbWeldSideWeb(self):
         weldSideWebOrigin_11 = numpy.array([-self.beamLeft.t/2, self.beamLeft.length, self.bbWeldSideWeb_21.L / 2])
         uDirWeb_11 = numpy.array([0, -1.0, 0])
         wDirWeb_11 = numpy.array([0, 0, -1.0])
         self.bbWeldSideWeb_11.place(weldSideWebOrigin_11, uDirWeb_11, wDirWeb_11)
 
-    def create_bbWeldSideWeb_12(self):
         weldSideWebOrigin_12 = numpy.array([self.beamLeft.t / 2, self.beamLeft.length, -self.bbWeldSideWeb_21.L / 2])
         uDirWeb_12 = numpy.array([0, -1.0, 0])
         wDirWeb_12 = numpy.array([0, 0, 1.0])
         self.bbWeldSideWeb_12.place(weldSideWebOrigin_12, uDirWeb_12, wDirWeb_12)
 
-    def create_bbWeldSideWeb_21(self):
         weldSideWebOrigin_21 = numpy.array([-self.beamLeft.t / 2, self.beamLeft.length + 2 * self.plateLeft.T, -self.bbWeldSideWeb_21.L / 2])
         uDirWeb_21 = numpy.array([0, 1.0, 0])
         wDirWeb_21 = numpy.array([0, 0, 1.0])
         self.bbWeldSideWeb_21.place(weldSideWebOrigin_21, uDirWeb_21, wDirWeb_21)
 
-    def create_bbWeldSideWeb_22(self):
         weldSideWebOrigin_22 = numpy.array([self.beamLeft.t / 2, self.beamLeft.length + 2 * self.plateLeft.T, self.bbWeldSideWeb_21.L / 2])
         uDirWeb_22 = numpy.array([0, 1.0, 0])
         wDirWeb_22 = numpy.array([0, 0, -1.0])
@@ -760,223 +730,7 @@ class CADFillet(object):
 #############################################################################################################
 #   Following functions returns the CAD model to the function display_3DModel of main file                  #
 #############################################################################################################
-    # def get_beam_models(self):
-    #     '''
-    #
-    #     Returns: Returns model of beam (left and right)
-    #
-    #     '''
-    #     return [self.beamRModel, self.beamLModel]
-    #
-    # def get_connector_models(self):
-    #     '''
-    #
-    #     Returns: Returns model related to connector (plates and weld)
-    #
-    #     '''
-    #     return [self.plateRModel, self.plateLModel, self.beam_stiffener_1Model, self.beam_stiffener_2Model, self.beam_stiffener_3Model,
-    #             self.beam_stiffener_4Model, self.bbWeldAbvFlang_11Model, self.bbWeldAbvFlang_12Model,
-    #             self.bbWeldAbvFlang_21Model, self.bbWeldAbvFlang_22Model, self.bbWeldBelwFlang_11Model, self.bbWeldBelwFlang_12Model,
-    #             self.bbWeldBelwFlang_13Model, self.bbWeldBelwFlang_14Model, self.bbWeldBelwFlang_21Model, self.bbWeldBelwFlang_22Model,
-    #             self.bbWeldBelwFlang_23Model, self.bbWeldBelwFlang_24Model, self.bbWeldSideWeb_11Model, self.bbWeldSideWeb_12Model,
-    #             self.bbWeldSideWeb_21Model, self.bbWeldSideWeb_22Model] + self.nut_bolt_array.get_models()
-    #
-    # def get_models(self):
-    #     '''
-    #
-    #     Returns: Returns model related to complete model (beams, plates and weld)
-    #
-    #     '''
-    #     return [self.beamRModel, self.beamLModel, self.plateRModel, self.plateLModel, self.beam_stiffener_1Model, self.beam_stiffener_2Model,
-    #             self.beam_stiffener_3Model, self.beam_stiffener_4Model, self.bbWeldAbvFlang_11Model, self.bbWeldAbvFlang_12Model,
-    #             self.bbWeldAbvFlang_21Model, self.bbWeldAbvFlang_22Model, self.bbWeldBelwFlang_11Model, self.bbWeldBelwFlang_12Model,
-    #             self.bbWeldBelwFlang_13Model, self.bbWeldBelwFlang_14Model, self.bbWeldBelwFlang_21Model, self.bbWeldBelwFlang_22Model,
-    #             self.bbWeldBelwFlang_23Model, self.bbWeldBelwFlang_24Model, self.bbWeldSideWeb_11Model, self.bbWeldSideWeb_12Model,
-    #             self.bbWeldSideWeb_21Model, self.bbWeldSideWeb_22Model] + self.nut_bolt_array.get_models()
 
-
-    def get_beamLModel(self):
-        return self.beamLModel
-
-    def get_beamRModel(self):
-        return self.beamRModel
-
-    def get_plateLModel(self):
-        return self.plateLModel
-
-    def get_plateRModel(self):
-        return self.plateRModel
-
-    def get_nutboltmodels(self):
-        return self.nut_bolt_array.get_models()
-
-    def get_beam_stiffener_1Model(self):
-        return self.beam_stiffener_1Model
-
-    def get_beam_stiffener_2Model(self):
-        return self.beam_stiffener_2Model
-
-    def get_beam_stiffener_3Model(self):
-        return self.beam_stiffener_3Model
-
-    def get_beam_stiffener_4Model(self):
-        return self.beam_stiffener_4Model
-
-    def get_beam_stiffener_F1Model(self):
-        return self.beam_stiffener_F1Model
-
-    def get_beam_stiffener_F2Model(self):
-        return self.beam_stiffener_F2Model
-
-    def get_beam_stiffener_F3Model(self):
-        return self.beam_stiffener_F3Model
-
-    def get_beam_stiffener_F4Model(self):
-        return self.beam_stiffener_F4Model
-
-    def get_bbWeldAbvFlang_11Model(self):
-        return self.bbWeldAbvFlang_11Model
-
-    def get_bbWeldAbvFlang_12Model(self):
-        return self.bbWeldAbvFlang_12Model
-
-    def get_bbWeldAbvFlang_21Model(self):
-        return self.bbWeldAbvFlang_21Model
-
-    def get_bbWeldAbvFlang_22Model(self):
-        return self.bbWeldAbvFlang_22Model
-
-    def get_bbWeldBelwFlang_11Model(self):
-        return self.bbWeldBelwFlang_11Model
-
-    def get_bbWeldBelwFlang_12Model(self):
-        return self.bbWeldBelwFlang_12Model
-
-    def get_bbWeldBelwFlang_13Model(self):
-        return self.bbWeldBelwFlang_13Model
-
-    def get_bbWeldBelwFlang_14Model(self):
-        return self.bbWeldBelwFlang_14Model
-
-    def get_bbWeldBelwFlang_21Model(self):
-        return self.bbWeldBelwFlang_21Model
-
-    def get_bbWeldBelwFlang_22Model(self):
-        return self.bbWeldBelwFlang_22Model
-
-    def get_bbWeldBelwFlang_23Model(self):
-        return self.bbWeldBelwFlang_23Model
-
-    def get_bbWeldBelwFlang_24Model(self):
-        return self.bbWeldBelwFlang_24Model
-
-    def get_bbWeldSideWeb_11Model(self):
-        return self.bbWeldSideWeb_11Model
-
-    def get_bbWeldSideWeb_12Model(self):
-        return self.bbWeldSideWeb_12Model
-
-    def get_bbWeldSideWeb_21Model(self):
-        return self.bbWeldSideWeb_21Model
-
-    def get_bbWeldSideWeb_22Model(self):
-        return self.bbWeldSideWeb_22Model
-
-    def get_bbWeldStiffHL_1Model(self):
-        return self.bbWeldStiffHL_1Model
-
-    def get_bbWeldStiffLL_1Model(self):
-        return self.bbWeldStiffLL_1Model
-
-    def get_bbWeldStiffHL_3Model(self):
-        return self.bbWeldStiffHL_3Model
-
-    def get_bbWeldStiffLL_3Model(self):
-        return self.bbWeldStiffLL_3Model
-
-    def get_bbWeldStiffHL_2Model(self):
-        return self.bbWeldStiffHL_2Model
-
-    def get_bbWeldStiffLL_2Model(self):
-        return self.bbWeldStiffLL_2Model
-
-    def get_bbWeldStiffHL_4Model(self):
-        return self.bbWeldStiffHL_4Model
-
-    def get_bbWeldStiffLL_4Model(self):
-        return self.bbWeldStiffLL_4Model
-
-    def get_bbWeldStiffHR_1Model(self):
-        return self.bbWeldStiffHR_1Model
-
-    def get_bbWeldStiffLR_1Model(self):
-        return self.bbWeldStiffLR_1Model
-
-    def get_bbWeldStiffHR_3Model(self):
-        return self.bbWeldStiffHR_3Model
-
-    def get_bbWeldStiffLR_3Model(self):
-        return self.bbWeldStiffLR_3Model
-
-    def get_bbWeldStiffHR_2Model(self):
-        return self.bbWeldStiffHR_2Model
-
-    def get_bbWeldStiffLR_2Model(self):
-        return self.bbWeldStiffLR_2Model
-
-    def get_bbWeldStiffHR_4Model(self):
-        return self.bbWeldStiffHR_4Model
-
-    def get_bbWeldStiffLR_4Model(self):
-        return self.bbWeldStiffLR_4Model
-
-    def get_bbWeldstiff1_u1Model(self):
-        return self.bbWeldstiff1_u1Model
-
-    def get_bbWeldstiff1_u2Model(self):
-        return self.bbWeldstiff1_u2Model
-
-    def get_bbWeldstiff1_l1Model(self):
-        return self.bbWeldstiff1_l1Model
-
-    def get_bbWeldstiff1_l2Model(self):
-        return self.bbWeldstiff1_l2Model
-
-    def get_bbWeldstiff2_u1Model(self):
-        return self.bbWeldstiff2_u1Model
-
-    def get_bbWeldstiff2_u2Model(self):
-        return self.bbWeldstiff2_u2Model
-
-    def get_bbWeldstiff2_l1Model(self):
-        return self.bbWeldstiff2_l1Model
-
-    def get_bbWeldstiff2_l2Model(self):
-        return self.bbWeldstiff2_l2Model
-
-    def get_bbWeldstiff3_u1Model(self):
-        return self.bbWeldstiff3_u1Model
-
-    def get_bbWeldstiff3_u2Model(self):
-        return self.bbWeldstiff3_u2Model
-
-    def get_bbWeldstiff3_l1Model(self):
-        return self.bbWeldstiff3_l1Model
-
-    def get_bbWeldstiff3_l2Model(self):
-        return self.bbWeldstiff3_l2Model
-
-    def get_bbWeldstiff4_u1Model(self):
-        return self.bbWeldstiff4_u1Model
-
-    def get_bbWeldstiff4_u2Model(self):
-        return self.bbWeldstiff4_u2Model
-
-    def get_bbWeldstiff4_l1Model(self):
-        return self.bbWeldstiff4_l1Model
-
-    def get_bbWeldstiff4_l2Model(self):
-        return self.bbWeldstiff4_l2Model
 
     def get_beam_models(self):
         return [self.beamLModel, self.beamRModel]
@@ -1085,33 +839,6 @@ class CADFillet(object):
                     self.bbWeldstiff3_l1Model, self.bbWeldstiff3_l2Model, self.bbWeldstiff4_u1Model,
                     self.bbWeldstiff4_u2Model, self.bbWeldstiff4_l1Model,
                     self.bbWeldstiff4_l2Model, ] + self.nut_bolt_array.get_models()
-
-        # return [self.beamLModel, self.beamRModel, self.plateLModel, self.plateRModel, self.beam_stiffener_1Model,
-        #         self.beam_stiffener_2Model, self.beam_stiffener_3Model,
-        #         self.beam_stiffener_4Model, self.beam_stiffener_F1Model, self.beam_stiffener_F2Model,
-        #         self.beam_stiffener_F3Model,
-        #         self.beam_stiffener_F4Model, self.bbWeldAbvFlang_11Model, self.bbWeldAbvFlang_12Model,
-        #         self.bbWeldAbvFlang_21Model,
-        #         self.bbWeldAbvFlang_22Model,
-        #         self.bbWeldBelwFlang_11Model, self.bbWeldBelwFlang_12Model, self.bbWeldBelwFlang_13Model,
-        #         self.bbWeldBelwFlang_14Model, self.bbWeldBelwFlang_21Model,
-        #         self.bbWeldBelwFlang_22Model, self.bbWeldBelwFlang_23Model, self.bbWeldBelwFlang_24Model,
-        #         self.bbWeldSideWeb_11Model, self.bbWeldSideWeb_12Model, self.bbWeldSideWeb_21Model,
-        #         self.bbWeldSideWeb_22Model, self.bbWeldStiffHL_1Model,
-        #         self.bbWeldStiffLL_1Model, self.bbWeldStiffHL_3Model, self.bbWeldStiffLL_3Model,
-        #         self.bbWeldStiffHL_2Model, self.bbWeldStiffLL_2Model,
-        #         self.bbWeldStiffHL_4Model, self.bbWeldStiffLL_4Model, self.bbWeldStiffHR_1Model,
-        #         self.bbWeldStiffLR_1Model, self.bbWeldStiffHR_3Model,
-        #         self.bbWeldStiffLR_3Model, self.bbWeldStiffHR_2Model, self.bbWeldStiffLR_2Model,
-        #         self.bbWeldStiffHR_4Model, self.bbWeldStiffLR_4Model,
-        #         self.bbWeldstiff1_u1Model, self.bbWeldstiff1_u2Model, self.bbWeldstiff1_l1Model,
-        #         self.bbWeldstiff1_l2Model, self.bbWeldstiff2_u1Model,
-        #         self.bbWeldstiff2_u2Model, self.bbWeldstiff2_l1Model, self.bbWeldstiff2_l2Model,
-        #         self.bbWeldstiff3_u1Model, self.bbWeldstiff3_u2Model,
-        #         self.bbWeldstiff3_l1Model, self.bbWeldstiff3_l2Model, self.bbWeldstiff4_u1Model,
-        #         self.bbWeldstiff4_u2Model, self.bbWeldstiff4_l1Model,
-        #         self.bbWeldstiff4_l2Model, ] + self.nut_bolt_array.get_models()
-
 
 
 class CADGroove(object):

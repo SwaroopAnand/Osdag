@@ -1784,14 +1784,10 @@ class Maincontroller(QMainWindow):
       plate_Right = copy.copy(plate_Left)     # Since both the end plates are identical
 
       #Beam stiffeners 4 if extended both ways, only 1 and 3 if extended oneway and non for flus type
-      beam_stiffener_1 = StiffenerPlate(W=outputobj['Stiffener']['Height'], L=outputobj['Stiffener']['Length'],
+      beam_stiffeners = StiffenerPlate(W=outputobj['Stiffener']['Height'], L=outputobj['Stiffener']['Length'],
                                 T=outputobj['Stiffener']['Thickness'], R11=outputobj['Stiffener']['Length'] - 25,
                                 R12=outputobj['Stiffener']['Height']-25,
                                 L21=outputobj['Stiffener']['NotchSize'],L22 =outputobj['Stiffener']['NotchSize'])       #TODO: given hard inputs to L21 and L22
-
-      beam_stiffener_2 = copy.copy(beam_stiffener_1)
-      beam_stiffener_3 = copy.copy(beam_stiffener_1)
-      beam_stiffener_4 = copy.copy(beam_stiffener_1)
 
 
       #Beam stiffeners for the flush type endplate
@@ -1890,33 +1886,18 @@ class Maincontroller(QMainWindow):
          '''
 
          # Followings welds are welds above beam flange, Qty = 4
-         bbWeldAbvFlang_11 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]), h=float(alist["Weld"]["Flange (mm)"]), L=beam_B)
-         bbWeldAbvFlang_12 = copy.copy(bbWeldAbvFlang_11)
-         bbWeldAbvFlang_21 = copy.copy(bbWeldAbvFlang_11)
-         bbWeldAbvFlang_22 = copy.copy(bbWeldAbvFlang_11)
+         bbWeldAbvFlang = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]), h=float(alist["Weld"]["Flange (mm)"]), L=beam_B)
 
          # Followings welds are welds below beam flange, Qty = 8
-         bbWeldBelwFlang_11 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]), h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw )/ 2- beam_R1-beam_R2)
-         bbWeldBelwFlang_12 = copy.copy(bbWeldBelwFlang_11)
-         bbWeldBelwFlang_13 = copy.copy(bbWeldBelwFlang_11)
-         bbWeldBelwFlang_14 = copy.copy(bbWeldBelwFlang_11)
-         bbWeldBelwFlang_21 = copy.copy(bbWeldBelwFlang_11)
-         bbWeldBelwFlang_22 = copy.copy(bbWeldBelwFlang_11)
-         bbWeldBelwFlang_23 = copy.copy(bbWeldBelwFlang_11)
-         bbWeldBelwFlang_24 = copy.copy(bbWeldBelwFlang_11)
+         bbWeldBelwFlang = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]), h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw )/ 2- beam_R1-beam_R2)
 
          # Followings welds are welds placed aside of beam web, Qty = 4
-         bbWeldSideWeb_11 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]), L=beam_d - 2 * (beam_T+beam_R1) - (2*5))
-         bbWeldSideWeb_12 = copy.copy(bbWeldSideWeb_11)
-         bbWeldSideWeb_21 = copy.copy(bbWeldSideWeb_11)
-         bbWeldSideWeb_22 = copy.copy(bbWeldSideWeb_11)
-
+         bbWeldSideWeb = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]), L=beam_d - 2 * (beam_T+beam_R1) - (2*5))
 
          extbothWays = CADFillet(beam_Left, beam_Right, plate_Left, plate_Right, bbNutBoltArray,
-                                 bbWeldAbvFlang_11, bbWeldAbvFlang_12, bbWeldAbvFlang_21, bbWeldAbvFlang_22,
-                                 bbWeldBelwFlang_11, bbWeldBelwFlang_12, bbWeldBelwFlang_13, bbWeldBelwFlang_14,
-                                 bbWeldBelwFlang_21, bbWeldBelwFlang_22, bbWeldBelwFlang_23, bbWeldBelwFlang_24,
-                                 bbWeldSideWeb_11, bbWeldSideWeb_12, bbWeldSideWeb_21, bbWeldSideWeb_22,
+                                 bbWeldAbvFlang,
+                                 bbWeldBelwFlang,
+                                 bbWeldSideWeb,
                               bbWeldstiff1_u1,bbWeldstiff1_u2,bbWeldstiff2_u1,bbWeldstiff2_u2,bbWeldstiff3_u1,
                               bbWeldstiff3_u2,bbWeldstiff4_u1,bbWeldstiff4_u2,
                            bbWeldstiff1_l1, bbWeldstiff1_l2, bbWeldstiff2_l1, bbWeldstiff2_l2, bbWeldstiff3_l1,
@@ -1925,7 +1906,7 @@ class Maincontroller(QMainWindow):
                               bbWeldStiffLL_1, bbWeldStiffLL_2, bbWeldStiffLL_3, bbWeldStiffLL_4,
                               bbWeldStiffHR_1, bbWeldStiffHR_2, bbWeldStiffHR_3, bbWeldStiffHR_4,
                               bbWeldStiffLR_1, bbWeldStiffLR_2, bbWeldStiffLR_3, bbWeldStiffLR_4,
-                                 beam_stiffener_1,beam_stiffener_2,beam_stiffener_3,beam_stiffener_4,
+                                 beam_stiffeners,
                            beam_stiffener_F1,beam_stiffener_F2,beam_stiffener_F3,beam_stiffener_F4, alist, outputobj)
          extbothWays.create_3DModel()
 
@@ -2094,71 +2075,71 @@ class Maincontroller(QMainWindow):
 
       # Displays the beams
       if component == "Beam":
-         osdag_display_shape(self.display, self.ExtObj.get_beamLModel(), update=True)
-         osdag_display_shape(self.display, self.ExtObj.get_beamRModel(), update=True)
+         osdag_display_shape(self.display, self.ExtObj.beamLModel, update=True)
+         osdag_display_shape(self.display, self.ExtObj.beamRModel, update=True)
 
       elif component == "Connector":
          # Displays the end plates
-         osdag_display_shape(self.display, self.ExtObj.get_plateLModel(), update=True, color='Blue')
-         osdag_display_shape(self.display, self.ExtObj.get_plateRModel(), update=True, color='Blue')\
+         osdag_display_shape(self.display, self.ExtObj.plateLModel, update=True, color='Blue')
+         osdag_display_shape(self.display, self.ExtObj.plateRModel, update=True, color='Blue')\
 
          #Adding stiffeners along with the weld
          if self.alist["Member"]["Connectivity"] == "Extended both ways" or self.alist["Member"][
             "Connectivity"] == "Extended one way":
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_1Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_3Model(), update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_1Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_3Model, update=True, color='Blue')
 
             # Fillet Welds
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_3Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_3Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_3Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_3Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_3Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_3Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_3Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_3Model, update=True, color='Red')
 
          if self.alist["Member"]["Connectivity"] == "Extended both ways":
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_2Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_4Model(), update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_2Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_4Model, update=True, color='Blue')
 
             # Fillet Welds
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_4Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_4Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_4Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_4Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_4Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_4Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_4Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_4Model, update=True, color='Red')
 
          if self.alist["Member"]["Connectivity"] == "Flush":
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F1Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F2Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F3Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F4Model(), update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F1Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F2Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F3Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F4Model, update=True, color='Blue')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_l2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_l2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_l2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_l2Model, update=True, color='Red')
 
          # Display all nut-bolts, call to nutBoltPlacement.py
          nutboltlist = self.ExtObj.nut_bolt_array.get_models()
@@ -2168,163 +2149,163 @@ class Maincontroller(QMainWindow):
          # Display all the Welds including the quarter cone
 
          if alist["Weld"]["Type"] == "Fillet Weld":
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_11Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_12Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_21Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_22Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_11Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_12Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_21Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_22Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_11Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_12Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_13Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_14Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_21Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_22Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_23Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_24Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_11Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_12Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_13Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_14Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_21Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_22Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_23Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_24Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_11Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_12Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_21Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_22Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_11Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_12Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_21Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_22Model, update=True, color='Red')
 
 
 
          else:      #Groove weld
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_R1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_R2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_L1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_L2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_R1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_R2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_L1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_L2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldWeb_R3Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldWeb_L3Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldWeb_R3Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldWeb_L3Model, update=True, color='Red')
 
             #TODO: This is the groove weld for the beam stiffenres
-            ## osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_1Model(), update=True, color='Red')
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_2Model(), update=True, color='Red')
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_3Model(), update=True, color='Red')
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_4Model(), update=True, color='Red')
+            ## osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_1Model, update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_2Model, update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_3Model, update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_4Model, update=True, color='Red')
             #
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_1Model(), update=True, color='Red')
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_2Model(), update=True, color='Red')
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_3Model(), update=True, color='Red')
-            # osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_4Model(), update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_1Model, update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_2Model, update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_3Model, update=True, color='Red')
+            # osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_4Model, update=True, color='Red')
 
 
       elif component == "Model":
-         osdag_display_shape(self.display, self.ExtObj.get_beamLModel(), update=True)
-         osdag_display_shape(self.display, self.ExtObj.get_beamRModel(), update=True)
+         osdag_display_shape(self.display, self.ExtObj.beamLModel, update=True)
+         osdag_display_shape(self.display, self.ExtObj.beamRModel, update=True)
          # Displays the end plates
-         osdag_display_shape(self.display, self.ExtObj.get_plateLModel(), update=True, color='Blue')
-         osdag_display_shape(self.display, self.ExtObj.get_plateRModel(), update=True, color='Blue')
+         osdag_display_shape(self.display, self.ExtObj.plateLModel, update=True, color='Blue')
+         osdag_display_shape(self.display, self.ExtObj.plateRModel, update=True, color='Blue')
 
          if self.alist["Member"]["Connectivity"] == "Extended both ways" or self.alist["Member"][
             "Connectivity"] == "Extended one way":
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_1Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_3Model(), update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_1Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_3Model, update=True, color='Blue')
 
             #Fillet Welds
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_3Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_3Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_3Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_3Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_3Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_3Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_3Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_3Model, update=True, color='Red')
 
          if self.alist["Member"]["Connectivity"] == "Extended both ways":
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_2Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_4Model(), update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_2Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_4Model, update=True, color='Blue')
 
             #Fillet Welds
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHL_4Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLL_4Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHL_4Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLL_4Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffHR_4Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffLR_4Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffHR_4Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldStiffLR_4Model, update=True, color='Red')
 
          if self.alist["Member"]["Connectivity"] == "Flush":
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F1Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F2Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F3Model(), update=True, color='Blue')
-            osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_F4Model(), update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F1Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F2Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F3Model, update=True, color='Blue')
+            osdag_display_shape(self.display, self.ExtObj.beam_stiffener_F4Model, update=True, color='Blue')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff1_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff1_l2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff2_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff2_l2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff3_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff3_l2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_u1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_u2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_l1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldstiff4_l2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_u1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_u2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_l1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldstiff4_l2Model, update=True, color='Red')
 
          # Display all nut-bolts, call to nutBoltPlacement.py
-         nutboltlist = self.ExtObj.nut_bolt_array.get_models()
+         nutboltlist = self.ExtObj.nut_bolt_array.models
          for nutbolt in nutboltlist:
             osdag_display_shape(self.display, nutbolt, color=Quantity_NOC_SADDLEBROWN, update=True)
 
 
          # Display all the Welds including the quarter cone
          if alist["Weld"]["Type"] == "Fillet Weld":
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_11Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_12Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_21Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_22Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_11Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_12Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_21Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_22Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_11Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_12Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_13Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_14Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_21Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_22Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_23Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_24Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_11Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_12Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_13Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_14Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_21Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_22Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_23Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_24Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_11Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_12Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_21Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_22Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_11Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_12Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_21Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_22Model, update=True, color='Red')
 
 
          else:   #Groove weld
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_R1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_R2Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_L1Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldFlang_L2Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_R1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_R2Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_L1Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldFlang_L2Model, update=True, color='Red')
 
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldWeb_R3Model(), update=True, color='Red')
-            osdag_display_shape(self.display, self.ExtObj.get_bbWeldWeb_L3Model(), update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldWeb_R3Model, update=True, color='Red')
+            osdag_display_shape(self.display, self.ExtObj.bbWeldWeb_L3Model, update=True, color='Red')
 
             #TODO: Thid is the groove weld fot the  beam stiffeners
             ## if self.alist["Member"]["Connectivity"] == "Extended both ways" or self.alist["Member"][
             #  "Connectivity"] == "Extended one way":
             #
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_1Model(), update=True, color='Red')
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_1Model(), update=True, color='Red')
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_3Model(), update=True, color='Red')
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_3Model(), update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_1Model, update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_1Model, update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_3Model, update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_3Model, update=True, color='Red')
             #
             # if self.alist["Member"]["Connectivity"] == "Extended both ways":
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_2Model(), update=True, color='Red')
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_2Model(), update=True, color='Red')
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffH_4Model(), update=True, color='Red')
-            #  osdag_display_shape(self.display, self.ExtObj.get_bbWeldStiffL_4Model(), update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_2Model, update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_2Model, update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_4Model, update=True, color='Red')
+            #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_4Model, update=True, color='Red')
 
 
    # =================================================================================
