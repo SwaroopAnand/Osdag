@@ -1795,10 +1795,6 @@ class Maincontroller(QMainWindow):
                                 T=outputobj['Stiffener']['Thickness'],
                                 L21=outputobj['Stiffener']['NotchSize'],L22 =outputobj['Stiffener']['NotchSize'])
 
-      # beam_stiffener_F2 = copy.copy(beam_stiffener_F1)
-      # beam_stiffener_F3 = copy.copy(beam_stiffener_F1)
-      # beam_stiffener_F4 = copy.copy(beam_stiffener_F1)
-
 
       alist = self.designParameters()         # An object to save all input values entered by user
 
@@ -1831,26 +1827,12 @@ class Maincontroller(QMainWindow):
                             L=outputobj['Stiffener']['Length'] - outputobj['Stiffener']['NotchSize'])
 
       #following welds are fillet welds for the flush endplate stiffeners
-      bbWeldstiffHeight = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+      bbWeldFlushstiffHeight = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
                             L=outputobj['Stiffener']['Height'] - outputobj['Stiffener']['NotchSize'])
-      # bbWeldstiff1_l1 = copy.copy(bbWeldstiff1_u1)
-      # bbWeldstiff2_u1 = copy.copy(bbWeldstiff1_u1)
-      # bbWeldstiff2_l1 = copy.copy(bbWeldstiff1_u1)
-      # bbWeldstiff3_u1 = copy.copy(bbWeldstiff1_u1)
-      # bbWeldstiff3_l1 = copy.copy(bbWeldstiff1_u1)
-      # bbWeldstiff4_u1 = copy.copy(bbWeldstiff1_u1)
-      # bbWeldstiff4_l1 = copy.copy(bbWeldstiff1_u1)
 
-      bbWeldstiffLength = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+
+      bbWeldFlushstiffLength = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
                             L=outputobj['Stiffener']['Length'] - outputobj['Stiffener']['NotchSize'])
-      # bbWeldstiff1_l2 = copy.copy(bbWeldstiff1_u2)
-      # bbWeldstiff2_u2 = copy.copy(bbWeldstiff1_u2)
-      # bbWeldstiff2_l2 = copy.copy(bbWeldstiff1_u2)
-      # bbWeldstiff3_u2 = copy.copy(bbWeldstiff1_u2)
-      # bbWeldstiff3_l2 = copy.copy(bbWeldstiff1_u2)
-      # bbWeldstiff4_u2 = copy.copy(bbWeldstiff1_u2)
-      # bbWeldstiff4_l2 = copy.copy(bbWeldstiff1_u2)
-
 
       if alist["Weld"]["Type"] == "Fillet Weld":
 
@@ -1872,52 +1854,29 @@ class Maincontroller(QMainWindow):
          bbWeldSideWeb = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]), L=beam_d - 2 * (beam_T+beam_R1) - (2*5))
 
          extbothWays = CADFillet(beam_Left, beam_Right, plate_Left, plate_Right, bbNutBoltArray,
-                                 bbWeldAbvFlang,bbWeldBelwFlang,bbWeldSideWeb, bbWeldstiffHeight, bbWeldstiffLength,
+                                 bbWeldAbvFlang,bbWeldBelwFlang,bbWeldSideWeb, bbWeldFlushstiffHeight, bbWeldFlushstiffLength,
                               bbWeldStiffHeight, bbWeldStiffLength,beam_stiffeners,beam_stiffenerFlush, alist, outputobj)
          extbothWays.create_3DModel()
 
          return extbothWays
 
       else:  # Groove Weld
-         bbWeldFlang_R1 = GrooveWeld(b=outputobj['Stiffener']['WeldSize'], h=float(beam_data["T"]),
+         bbWeldFlang = GrooveWeld(b=outputobj['Stiffener']['WeldSize'], h=float(beam_data["T"]),
                               L=beam_B)         #outputobj["Weld"]["Size"]
-         bbWeldFlang_R2 = copy.copy(bbWeldFlang_R1)
-
-         bbWeldFlang_L1 = copy.copy(bbWeldFlang_R1)
-         bbWeldFlang_L2 = copy.copy(bbWeldFlang_R1)
 
          # Followings welds are welds placed aside of beam web, Qty = 4           # edited length value by Anand Swaroop
-         bbWeldWeb_R3 = GrooveWeld(b=outputobj['Stiffener']['WeldSize'], h=float(beam_data["tw"]),
+         bbWeldWeb = GrooveWeld(b=outputobj['Stiffener']['WeldSize'], h=float(beam_data["tw"]),
                             L=beam_d - 2 * beam_T)       #outputobj["Weld"]["Size"]
 
-         bbWeldWeb_L3 = copy.copy(bbWeldWeb_R3)
-
-         #Following welds are to join beam stiffeners to the beam
-         bbWeldStiffH_1 = GrooveWeld(b=outputobj['Stiffener']['WeldSize'], h= outputobj['Stiffener']['Thickness'], L= outputobj['Stiffener']['Height']-outputobj['Stiffener']['NotchSize'])    #outputobj['Stiffener']['Length'] - 25
-         bbWeldStiffH_2 = copy.copy(bbWeldStiffH_1)
-         bbWeldStiffH_3 = copy.copy(bbWeldStiffH_1)
-         bbWeldStiffH_4 = copy.copy(bbWeldStiffH_1)
-
-         bbWeldStiffL_1 = GrooveWeld(b=outputobj['Stiffener']['WeldSize'], h= outputobj['Stiffener']['Thickness'], L= outputobj['Stiffener']['Length']-outputobj['Stiffener']['NotchSize'])
-         bbWeldStiffL_2 = copy.copy(bbWeldStiffL_1)
-         bbWeldStiffL_3 = copy.copy(bbWeldStiffL_1)
-         bbWeldStiffL_4 = copy.copy(bbWeldStiffL_1)
 
 
          #######################################
          #       WELD SECTIONS QUARTER CONE    #
          #######################################
 
-         extbothWays = CADGroove(beam_Left, beam_Right,plate_Left, plate_Right, bbNutBoltArray,
-                           bbWeldFlang_R1, bbWeldFlang_R2, bbWeldWeb_R3,bbWeldFlang_L1, bbWeldFlang_L2, bbWeldWeb_L3,
-                           bbWeldStiffHeight,
-                           bbWeldStiffLength,
-                           bbWeldstiff1_u1, bbWeldstiff1_u2, bbWeldstiff2_u1, bbWeldstiff2_u2, bbWeldstiff3_u1,
-                           bbWeldstiff3_u2, bbWeldstiff4_u1, bbWeldstiff4_u2,
-                           bbWeldstiff1_l1, bbWeldstiff1_l2, bbWeldstiff2_l1, bbWeldstiff2_l2, bbWeldstiff3_l1,
-                           bbWeldstiff3_l2, bbWeldstiff4_l1, bbWeldstiff4_l2,
-                           beam_stiffener_1, beam_stiffener_2,beam_stiffener_3, beam_stiffener_4,
-                           beam_stiffener_F1,beam_stiffener_F2,beam_stiffener_F3,beam_stiffener_F4,alist, outputobj)
+         extbothWays = CADGroove(beam_Left, beam_Right,plate_Left, plate_Right, bbNutBoltArray, bbWeldFlang, bbWeldWeb,
+                                 bbWeldStiffHeight,bbWeldStiffLength,bbWeldFlushstiffHeight, bbWeldFlushstiffLength,
+                           beam_stiffeners, beam_stiffenerFlush,alist, outputobj)
          extbothWays.create_3DModel()
 
          return extbothWays
