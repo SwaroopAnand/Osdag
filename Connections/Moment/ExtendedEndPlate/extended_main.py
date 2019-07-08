@@ -1791,13 +1791,13 @@ class Maincontroller(QMainWindow):
 
 
       #Beam stiffeners for the flush type endplate
-      beam_stiffener_F1 =  StiffenerPlate(W=outputobj['Stiffener']['Height'], L=outputobj['Stiffener']['Length'],
+      beam_stiffenerFlush =  StiffenerPlate(W=outputobj['Stiffener']['Height'], L=outputobj['Stiffener']['Length'],
                                 T=outputobj['Stiffener']['Thickness'],
                                 L21=outputobj['Stiffener']['NotchSize'],L22 =outputobj['Stiffener']['NotchSize'])
 
-      beam_stiffener_F2 = copy.copy(beam_stiffener_F1)
-      beam_stiffener_F3 = copy.copy(beam_stiffener_F1)
-      beam_stiffener_F4 = copy.copy(beam_stiffener_F1)
+      # beam_stiffener_F2 = copy.copy(beam_stiffener_F1)
+      # beam_stiffener_F3 = copy.copy(beam_stiffener_F1)
+      # beam_stiffener_F4 = copy.copy(beam_stiffener_F1)
 
 
       alist = self.designParameters()         # An object to save all input values entered by user
@@ -1821,58 +1821,35 @@ class Maincontroller(QMainWindow):
 
       # Following welds are for to weld stiffeners for extended bothways and ext4ended oneway
       # bbWeld for stiffener hight on left side
-      bbWeldStiffHL_1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+      bbWeldStiffHeight = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
                             L=outputobj['Stiffener'][
                                  'Height'] - outputobj['Stiffener'][
                                  'NotchSize'])  # outputobj['Stiffener']['Length'] - 25
-      bbWeldStiffHL_2 = copy.copy(bbWeldStiffHL_1)
-      bbWeldStiffHL_3 = copy.copy(bbWeldStiffHL_1)
-      bbWeldStiffHL_4 = copy.copy(bbWeldStiffHL_1)
 
       # bbWeld for stiffener length on left side
-      bbWeldStiffLL_1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+      bbWeldStiffLength = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
                             L=outputobj['Stiffener']['Length'] - outputobj['Stiffener']['NotchSize'])
-      bbWeldStiffLL_2 = copy.copy(bbWeldStiffLL_1)
-      bbWeldStiffLL_3 = copy.copy(bbWeldStiffLL_1)
-      bbWeldStiffLL_4 = copy.copy(bbWeldStiffLL_1)
-
-      # bbWeld for stiffener hight on Right side
-      bbWeldStiffHR_1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
-                            L=outputobj['Stiffener'][
-                                 'Height'] - outputobj['Stiffener'][
-                                 'NotchSize'])  # outputobj['Stiffener']['Length'] - 25
-      bbWeldStiffHR_2 = copy.copy(bbWeldStiffHR_1)
-      bbWeldStiffHR_3 = copy.copy(bbWeldStiffHR_1)
-      bbWeldStiffHR_4 = copy.copy(bbWeldStiffHR_1)
-
-      # bbWeld for stiffener length on right side
-      bbWeldStiffLR_1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
-                            L=outputobj['Stiffener']['Length'] - outputobj['Stiffener']['NotchSize'])
-      bbWeldStiffLR_2 = copy.copy(bbWeldStiffLR_1)
-      bbWeldStiffLR_3 = copy.copy(bbWeldStiffLR_1)
-      bbWeldStiffLR_4 = copy.copy(bbWeldStiffLR_1)
-
 
       #following welds are fillet welds for the flush endplate stiffeners
-      bbWeldstiff1_u1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+      bbWeldstiffHeight = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
                             L=outputobj['Stiffener']['Height'] - outputobj['Stiffener']['NotchSize'])
-      bbWeldstiff1_l1 = copy.copy(bbWeldstiff1_u1)
-      bbWeldstiff2_u1 = copy.copy(bbWeldstiff1_u1)
-      bbWeldstiff2_l1 = copy.copy(bbWeldstiff1_u1)
-      bbWeldstiff3_u1 = copy.copy(bbWeldstiff1_u1)
-      bbWeldstiff3_l1 = copy.copy(bbWeldstiff1_u1)
-      bbWeldstiff4_u1 = copy.copy(bbWeldstiff1_u1)
-      bbWeldstiff4_l1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff1_l1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff2_u1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff2_l1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff3_u1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff3_l1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff4_u1 = copy.copy(bbWeldstiff1_u1)
+      # bbWeldstiff4_l1 = copy.copy(bbWeldstiff1_u1)
 
-      bbWeldstiff1_u2 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+      bbWeldstiffLength = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
                             L=outputobj['Stiffener']['Length'] - outputobj['Stiffener']['NotchSize'])
-      bbWeldstiff1_l2 = copy.copy(bbWeldstiff1_u2)
-      bbWeldstiff2_u2 = copy.copy(bbWeldstiff1_u2)
-      bbWeldstiff2_l2 = copy.copy(bbWeldstiff1_u2)
-      bbWeldstiff3_u2 = copy.copy(bbWeldstiff1_u2)
-      bbWeldstiff3_l2 = copy.copy(bbWeldstiff1_u2)
-      bbWeldstiff4_u2 = copy.copy(bbWeldstiff1_u2)
-      bbWeldstiff4_l2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff1_l2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff2_u2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff2_l2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff3_u2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff3_l2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff4_u2 = copy.copy(bbWeldstiff1_u2)
+      # bbWeldstiff4_l2 = copy.copy(bbWeldstiff1_u2)
 
 
       if alist["Weld"]["Type"] == "Fillet Weld":
@@ -1895,19 +1872,8 @@ class Maincontroller(QMainWindow):
          bbWeldSideWeb = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]), L=beam_d - 2 * (beam_T+beam_R1) - (2*5))
 
          extbothWays = CADFillet(beam_Left, beam_Right, plate_Left, plate_Right, bbNutBoltArray,
-                                 bbWeldAbvFlang,
-                                 bbWeldBelwFlang,
-                                 bbWeldSideWeb,
-                              bbWeldstiff1_u1,bbWeldstiff1_u2,bbWeldstiff2_u1,bbWeldstiff2_u2,bbWeldstiff3_u1,
-                              bbWeldstiff3_u2,bbWeldstiff4_u1,bbWeldstiff4_u2,
-                           bbWeldstiff1_l1, bbWeldstiff1_l2, bbWeldstiff2_l1, bbWeldstiff2_l2, bbWeldstiff3_l1,
-                           bbWeldstiff3_l2, bbWeldstiff4_l1, bbWeldstiff4_l2,
-                              bbWeldStiffHL_1, bbWeldStiffHL_2, bbWeldStiffHL_3, bbWeldStiffHL_4,
-                              bbWeldStiffLL_1, bbWeldStiffLL_2, bbWeldStiffLL_3, bbWeldStiffLL_4,
-                              bbWeldStiffHR_1, bbWeldStiffHR_2, bbWeldStiffHR_3, bbWeldStiffHR_4,
-                              bbWeldStiffLR_1, bbWeldStiffLR_2, bbWeldStiffLR_3, bbWeldStiffLR_4,
-                                 beam_stiffeners,
-                           beam_stiffener_F1,beam_stiffener_F2,beam_stiffener_F3,beam_stiffener_F4, alist, outputobj)
+                                 bbWeldAbvFlang,bbWeldBelwFlang,bbWeldSideWeb, bbWeldstiffHeight, bbWeldstiffLength,
+                              bbWeldStiffHeight, bbWeldStiffLength,beam_stiffeners,beam_stiffenerFlush, alist, outputobj)
          extbothWays.create_3DModel()
 
          return extbothWays
@@ -1944,10 +1910,8 @@ class Maincontroller(QMainWindow):
 
          extbothWays = CADGroove(beam_Left, beam_Right,plate_Left, plate_Right, bbNutBoltArray,
                            bbWeldFlang_R1, bbWeldFlang_R2, bbWeldWeb_R3,bbWeldFlang_L1, bbWeldFlang_L2, bbWeldWeb_L3,
-                           bbWeldStiffHL_1, bbWeldStiffHL_2, bbWeldStiffHL_3, bbWeldStiffHL_4,
-                           bbWeldStiffLL_1, bbWeldStiffLL_2, bbWeldStiffLL_3, bbWeldStiffLL_4,
-                           bbWeldStiffHR_1, bbWeldStiffHR_2, bbWeldStiffHR_3, bbWeldStiffHR_4,
-                           bbWeldStiffLR_1, bbWeldStiffLR_2, bbWeldStiffLR_3, bbWeldStiffLR_4,
+                           bbWeldStiffHeight,
+                           bbWeldStiffLength,
                            bbWeldstiff1_u1, bbWeldstiff1_u2, bbWeldstiff2_u1, bbWeldstiff2_u2, bbWeldstiff3_u1,
                            bbWeldstiff3_u2, bbWeldstiff4_u1, bbWeldstiff4_u2,
                            bbWeldstiff1_l1, bbWeldstiff1_l2, bbWeldstiff2_l1, bbWeldstiff2_l2, bbWeldstiff3_l1,
