@@ -1867,7 +1867,6 @@ class Maincontroller(QMainWindow):
 		if alist["Weld"]["Flange (mm)"] == "Select weld thickness":
 			alist["Weld"]["Flange (mm)"] = 3
 
-		# TODO make dictionary for the contPlates
 		# TODO adding enpplate type and check if code is working
 		# TODO added connectivity type here
 
@@ -1884,23 +1883,23 @@ class Maincontroller(QMainWindow):
 		else:  # uiObj['Member']['EndPlate_type'] == "Extended both ways":
 			endplate_type = "both_way"
 
-		contPlate_L1 = StiffenerPlate(W=(float(column_data["B"]) - float(column_data["tw"])) / 2,
+		contPlates = StiffenerPlate(W=(float(column_data["B"]) - float(column_data["tw"])) / 2,
 									  L=float(column_data["D"]) - 2 * float(column_data["T"]),
 									  T=outputobj['ContPlateComp']['Thickness'])
 
-		contPlate_L2 = StiffenerPlate(W=(float(column_data["B"]) - float(column_data["tw"])) / 2,
-									  L=float(column_data["D"]) - 2 * float(column_data["T"]),
-									  T=outputobj['ContPlateTens']['Thickness'])
-		contPlate_R1 = copy.copy(contPlate_L1)
-		contPlate_R2 = copy.copy(contPlate_L2)
+		# contPlate_L2 = StiffenerPlate(W=(float(column_data["B"]) - float(column_data["tw"])) / 2,
+		# 							  L=float(column_data["D"]) - 2 * float(column_data["T"]),
+		# 							  T=outputobj['ContPlateTens']['Thickness'])
+		# contPlate_R1 = copy.copy(contPlate_L1)
+		# contPlate_R2 = copy.copy(contPlate_L2)
 
-		beam_stiffener_1 = StiffenerPlate(W=outputobj['Stiffener']['Height'], L=outputobj['Stiffener']['Length'],
+		beam_stiffeners = StiffenerPlate(W=outputobj['Stiffener']['Height'], L=outputobj['Stiffener']['Length'],
 										  T=outputobj['Stiffener']['Thickness'], R11=outputobj['Stiffener']['NotchTop'],
 										  R12=outputobj['Stiffener']['NotchTop'],
 										  L21=outputobj['Stiffener']['NotchBottom'],
 										  L22=outputobj['Stiffener']['NotchBottom'])
 
-		beam_stiffener_2 = copy.copy(beam_stiffener_1)
+		# beam_stiffener_2 = copy.copy(beam_stiffener_1)
 
 
 		bolt_d = float(alist["Bolt"]["Diameter (mm)"])  # Bolt diameter, entered by user
@@ -1938,171 +1937,146 @@ class Maincontroller(QMainWindow):
 		############################### Weld for the beam stiffeners ################################################
 
 		# bbWeld for stiffener hight on left side
-		bcWeldStiffHL_1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+		bcWeldStiffHeight = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
 									 L=outputobj['Stiffener']['Height'] - outputobj['Stiffener']['NotchBottom'])
-		bcWeldStiffHL_2 = copy.copy(bcWeldStiffHL_1)
-		bcWeldStiffHR_1 = copy.copy(bcWeldStiffHL_1)
-		bcWeldStiffHR_2 = copy.copy(bcWeldStiffHL_1)
+		# bcWeldStiffHL_2 = copy.copy(bcWeldStiffHL_1)
+		# bcWeldStiffHR_1 = copy.copy(bcWeldStiffHL_1)
+		# bcWeldStiffHR_2 = copy.copy(bcWeldStiffHL_1)
 
-		bcWeldStiffLL_1 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+		bcWeldStiffLength = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
 									 L=outputobj['Stiffener']['Length'] - outputobj['Stiffener']['NotchBottom'])
-		bcWeldStiffLL_2 = copy.copy(bcWeldStiffLL_1)
-		bcWeldStiffLR_1 = copy.copy(bcWeldStiffLL_1)
-		bcWeldStiffLR_2 = copy.copy(bcWeldStiffLL_1)
+		# bcWeldStiffLL_2 = copy.copy(bcWeldStiffLL_1)
+		# bcWeldStiffLR_1 = copy.copy(bcWeldStiffLL_1)
+		# bcWeldStiffLR_2 = copy.copy(bcWeldStiffLL_1)
 
-		contWeldL1_U2 = FilletWeld(b=float(outputobj['ContPlateTens']['Weld']), h=float(outputobj['ContPlateTens']['Weld']),
+		contWeldD = FilletWeld(b=float(outputobj['ContPlateTens']['Weld']), h=float(outputobj['ContPlateTens']['Weld']),
 								   L=float(column_data["D"]) - 2 * float(column_data["T"]))
-		contWeldL2_U2 = FilletWeld(b=float(outputobj['ContPlateTens']['Weld']), h=float(outputobj['ContPlateTens']['Weld']),
-								   L=float(column_data["D"]) - 2 * float(column_data["T"]))
-		contWeldL1_L2 = copy.copy(contWeldL2_U2)
-		contWeldL2_L2 = copy.copy(contWeldL2_U2)
-		contWeldR1_U2 = copy.copy(contWeldL2_U2)
-		contWeldR2_U2 = copy.copy(contWeldL2_U2)
-		contWeldR1_L2 = copy.copy(contWeldL2_U2)
-		contWeldR2_L2 = copy.copy(contWeldL2_U2)
-		contWeldL1_U3 = FilletWeld(b=float(outputobj['ContPlateTens']['Weld']), h=float(outputobj['ContPlateTens']['Weld']),
+		# contWeldL2_U2 = FilletWeld(b=float(outputobj['ContPlateTens']['Weld']), h=float(outputobj['ContPlateTens']['Weld']),
+		# 						   L=float(column_data["D"]) - 2 * float(column_data["T"]))
+		# contWeldL1_L2 = copy.copy(contWeldL2_U2)
+		# contWeldL2_L2 = copy.copy(contWeldL2_U2)
+		# contWeldR1_U2 = copy.copy(contWeldL2_U2)
+		# contWeldR2_U2 = copy.copy(contWeldL2_U2)
+		# contWeldR1_L2 = copy.copy(contWeldL2_U2)
+		# contWeldR2_L2 = copy.copy(contWeldL2_U2)
+		contWeldB = FilletWeld(b=float(outputobj['ContPlateTens']['Weld']), h=float(outputobj['ContPlateTens']['Weld']),
 								   L=float(column_data["B"]) / 2 - float(column_data["tw"]) / 2)
-		contWeldL1_L3 = copy.copy(contWeldL1_U3)
-		contWeldL2_U3 = copy.copy(contWeldL1_U3)
-		contWeldL2_L3 = copy.copy(contWeldL1_U3)
-		contWeldR1_U3 = copy.copy(contWeldL1_U3)
-		contWeldR1_L3 = copy.copy(contWeldL1_U3)
-		contWeldR2_U3 = copy.copy(contWeldL1_U3)
-		contWeldR2_L3 = copy.copy(contWeldL1_U3)
-		contWeldL1_U1 = copy.copy(contWeldL1_U3)
-		contWeldL1_L1 = copy.copy(contWeldL1_U3)
-		contWeldL2_U1 = copy.copy(contWeldL1_U3)
-		contWeldL2_L1 = copy.copy(contWeldL1_U3)
-		contWeldR1_U1 = copy.copy(contWeldL1_U3)
-		contWeldR1_L1 = copy.copy(contWeldL1_U3)
-		contWeldR2_U1 = copy.copy(contWeldL1_U3)
-		contWeldR2_L1 = copy.copy(contWeldL1_U3)
+		# contWeldL1_L3 = copy.copy(contWeldL1_U3)
+		# contWeldL2_U3 = copy.copy(contWeldL1_U3)
+		# contWeldL2_L3 = copy.copy(contWeldL1_U3)
+		# contWeldR1_U3 = copy.copy(contWeldL1_U3)
+		# contWeldR1_L3 = copy.copy(contWeldL1_U3)
+		# contWeldR2_U3 = copy.copy(contWeldL1_U3)
+		# contWeldR2_L3 = copy.copy(contWeldL1_U3)
+		# contWeldL1_U1 = copy.copy(contWeldL1_U3)
+		# contWeldL1_L1 = copy.copy(contWeldL1_U3)
+		# contWeldL2_U1 = copy.copy(contWeldL1_U3)
+		# contWeldL2_L1 = copy.copy(contWeldL1_U3)
+		# contWeldR1_U1 = copy.copy(contWeldL1_U3)
+		# contWeldR1_L1 = copy.copy(contWeldL1_U3)
+		# contWeldR2_U1 = copy.copy(contWeldL1_U3)
+		# contWeldR2_L1 = copy.copy(contWeldL1_U3)
 
+		if alist["Weld"]["Method"] == "Fillet Weld":
+			# Followings welds are welds above beam flange, Qty = 4
+			bbWeldAbvFlang = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
+										h=float(alist["Weld"]["Flange (mm)"]),
+										L=beam_B)
+			# bbWeldAbvFlang_22 = copy.copy(bbWeldAbvFlang_21)
+
+			# Followings welds are welds below beam flange, Qty = 8
+			bbWeldBelwFlang = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
+										 h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw) / 2)
+			# bbWeldBelwFlang_22 = copy.copy(bbWeldBelwFlang_21)
+			# bbWeldBelwFlang_23 = copy.copy(bbWeldBelwFlang_21)
+			# bbWeldBelwFlang_24 = copy.copy(bbWeldBelwFlang_21)
+
+			# Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
+			bbWeldSideWeb = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+									   L=beam_d - 2 * beam_T - 40)
+			# bbWeldSideWeb_22 = copy.copy(bbWeldSideWeb_21)
+
+		else:
+
+			bcWeldFlang = GrooveWeld(b=outputobj["Weld"]["Size"], h=float(beam_data["T"]),
+									   L=beam_B)
+			# bcWeldFlang_2 = copy.copy(bcWeldFlang_1)
+
+			# Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
+			bcWeldWeb = GrooveWeld(b=outputobj["Weld"]["Size"], h=float(beam_data["tw"]),
+									 L=beam_d - 2 * beam_T)
 
 
 		if conn_type == 'col_flange_connectivity':
 
 			if alist["Weld"]["Method"] == "Fillet Weld":
 
-				# Followings welds are welds above beam flange, Qty = 4
-				bbWeldAbvFlang_21 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
-											   h=float(alist["Weld"]["Flange (mm)"]),
-											   L=beam_B)
-				bbWeldAbvFlang_22 = copy.copy(bbWeldAbvFlang_21)
+				# # Followings welds are welds above beam flange, Qty = 4
+				# bbWeldAbvFlang = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
+				# 							   h=float(alist["Weld"]["Flange (mm)"]),
+				# 							   L=beam_B)
+				# # bbWeldAbvFlang_22 = copy.copy(bbWeldAbvFlang_21)
+				#
+				# # Followings welds are welds below beam flange, Qty = 8
+				# bbWeldBelwFlang = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
+				# 								h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw) / 2)
+				# # bbWeldBelwFlang_22 = copy.copy(bbWeldBelwFlang_21)
+				# # bbWeldBelwFlang_23 = copy.copy(bbWeldBelwFlang_21)
+				# # bbWeldBelwFlang_24 = copy.copy(bbWeldBelwFlang_21)
+				#
+				# # Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
+				# bbWeldSideWeb = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+				# 							  L=beam_d - 2 * beam_T - 40)
+				# # bbWeldSideWeb_22 = copy.copy(bbWeldSideWeb_21)
 
-				# Followings welds are welds below beam flange, Qty = 8
-				bbWeldBelwFlang_21 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
-												h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw) / 2)
-				bbWeldBelwFlang_22 = copy.copy(bbWeldBelwFlang_21)
-				bbWeldBelwFlang_23 = copy.copy(bbWeldBelwFlang_21)
-				bbWeldBelwFlang_24 = copy.copy(bbWeldBelwFlang_21)
-
-				# Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
-				bbWeldSideWeb_21 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
-											  L=beam_d - 2 * beam_T - 40)
-				bbWeldSideWeb_22 = copy.copy(bbWeldSideWeb_21)
-				#######################################
-				#       WELD SECTIONS QUARTER CONE    #
-				#######################################
-
-				extbothWays = CADFillet(beam_Left, beam_Right, plate_Right, bbNutBoltArray,bolt, bbWeldAbvFlang_21,
-										bbWeldAbvFlang_22,
-										bbWeldBelwFlang_21, bbWeldBelwFlang_22, bbWeldBelwFlang_23,
-										bbWeldBelwFlang_24,
-										bbWeldSideWeb_21, bbWeldSideWeb_22,
-										contWeldL1_U2 ,contWeldL2_U2,contWeldL1_L2 ,contWeldL2_L2,
-										contWeldR1_U2, contWeldR2_U2, contWeldR1_L2, contWeldR2_L2,
-										contWeldL1_U3,contWeldL1_L3,contWeldL2_U3,contWeldL2_L3,
-										contWeldR1_U3, contWeldR1_L3, contWeldR2_U3,contWeldR2_L3,
-										contWeldL1_U1,contWeldL1_L1,contWeldL2_U1,contWeldL2_L1,
-										contWeldR1_U1, contWeldR1_L1, contWeldR2_U1,contWeldR2_L1,
-										bcWeldStiffHL_1,bcWeldStiffHL_2,bcWeldStiffHR_1,bcWeldStiffHR_2,
-										bcWeldStiffLL_1,bcWeldStiffLL_2, bcWeldStiffLR_1, bcWeldStiffLR_2,
-										contPlate_L1, contPlate_L2, contPlate_R1,
-										contPlate_R2, beam_stiffener_1, beam_stiffener_2, endplate_type, conn_type,
+				extbothWays = CADFillet(beam_Left, beam_Right, plate_Right, bbNutBoltArray,bolt, bbWeldAbvFlang,
+										bbWeldBelwFlang,
+										bbWeldSideWeb,contWeldD ,contWeldB,
+										bcWeldStiffHeight,bcWeldStiffLength,
+										contPlates, beam_stiffeners, endplate_type, conn_type,
 										outputobj)
 				extbothWays.create_3DModel()
 
 				return extbothWays
 
 			else:  # Groove Weld
-				bcWeldFlang_1 = GrooveWeld(b=outputobj["Weld"]["Size"], h=float(beam_data["T"]),L=beam_B)
-				bcWeldFlang_2 = copy.copy(bcWeldFlang_1)
-
-				# Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
-				bcWeldWeb_3 = GrooveWeld(b=outputobj["Weld"]["Size"], h=float(beam_data["tw"]), L=beam_d - 2 * beam_T)
-
-				#######################################
-				#       WELD SECTIONS QUARTER CONE    #
-				#######################################
 
 				extbothWays = CADGroove(beam_Left, beam_Right, plate_Right, bbNutBoltArray,bolt,
-										bcWeldFlang_1, bcWeldFlang_2, bcWeldWeb_3,
-										bcWeldStiffHL_1, bcWeldStiffHL_2, bcWeldStiffHR_1, bcWeldStiffHR_2,
-										bcWeldStiffLL_1, bcWeldStiffLL_2, bcWeldStiffLR_1, bcWeldStiffLR_2,
-										contWeldL1_U2, contWeldL2_U2, contWeldL1_L2, contWeldL2_L2,
-										contWeldR1_U2, contWeldR2_U2, contWeldR1_L2, contWeldR2_L2,
-										contWeldL1_U3, contWeldL1_L3, contWeldL2_U3, contWeldL2_L3,
-										contWeldR1_U3, contWeldR1_L3, contWeldR2_U3, contWeldR2_L3,
-										contWeldL1_U1, contWeldL1_L1, contWeldL2_U1, contWeldL2_L1,
-										contWeldR1_U1, contWeldR1_L1, contWeldR2_U1, contWeldR2_L1,
-										contPlate_L1, contPlate_L2, contPlate_R1,
-										contPlate_R2, beam_stiffener_1, beam_stiffener_2, endplate_type, outputobj)
+										bcWeldFlang, bcWeldWeb,
+										bcWeldStiffHeight,bcWeldStiffLength,contWeldD,contWeldB,
+										contPlates,beam_stiffeners, endplate_type, outputobj)
 				extbothWays.create_3DModel()
 
 				return extbothWays
 
 		else:  # conn_type = 'col_web_connectivity'
 			if alist["Weld"]["Method"] == "Fillet Weld":
-				# Followings welds are welds above beam flange, Qty = 4
-				bbWeldAbvFlang_21 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
-											   h=float(alist["Weld"]["Flange (mm)"]),
-											   L=beam_B)
-				bbWeldAbvFlang_22 = copy.copy(bbWeldAbvFlang_21)
+				# # Followings welds are welds above beam flange, Qty = 4
+				# bbWeldAbvFlang_21 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
+				# 							   h=float(alist["Weld"]["Flange (mm)"]),
+				# 							   L=beam_B)
+				# bbWeldAbvFlang_22 = copy.copy(bbWeldAbvFlang_21)
+				#
+				# # Followings welds are welds below beam flange, Qty = 8
+				# bbWeldBelwFlang_21 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
+				# 								h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw) / 2)
+				# bbWeldBelwFlang_22 = copy.copy(bbWeldBelwFlang_21)
+				# bbWeldBelwFlang_23 = copy.copy(bbWeldBelwFlang_21)
+				# bbWeldBelwFlang_24 = copy.copy(bbWeldBelwFlang_21)
+				#
+				# # Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
+				# bbWeldSideWeb_21 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
+				# 							  L=beam_d - 2 * beam_T - 40)
+				# bbWeldSideWeb_22 = copy.copy(bbWeldSideWeb_21)
 
-				# Followings welds are welds below beam flange, Qty = 8
-				bbWeldBelwFlang_21 = FilletWeld(b=float(alist["Weld"]["Flange (mm)"]),
-												h=float(alist["Weld"]["Flange (mm)"]), L=(beam_B - beam_tw) / 2)
-				bbWeldBelwFlang_22 = copy.copy(bbWeldBelwFlang_21)
-				bbWeldBelwFlang_23 = copy.copy(bbWeldBelwFlang_21)
-				bbWeldBelwFlang_24 = copy.copy(bbWeldBelwFlang_21)
-
-				# Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
-				bbWeldSideWeb_21 = FilletWeld(b=float(alist["Weld"]["Web (mm)"]), h=float(alist["Weld"]["Web (mm)"]),
-											  L=beam_d - 2 * beam_T - 40)
-				bbWeldSideWeb_22 = copy.copy(bbWeldSideWeb_21)
-
-				#######################################
-				#       WELD SECTIONS QUARTER CONE    #
-				#######################################
-
-				# extbothWays = CADFillet(beam_Left, beam_Right, plate_Right, bbNutBoltArray, bbWeldAbvFlang_21,
-				# 						bbWeldAbvFlang_22,
-				# 						bbWeldBelwFlang_21, bbWeldBelwFlang_22, bbWeldBelwFlang_23,
-				# 						bbWeldBelwFlang_24,
-				# 						bbWeldSideWeb_21, bbWeldSideWeb_22,
-				# 						contPlate_L1, contPlate_L2, contPlate_R1,
-				# 						contPlate_R2, endplate_type, conn_type)
 
 				col_web_connectivity = CADColWebFillet(beam_Left, beam_Right, plate_Right, bbNutBoltArray,bolt,
-													   bbWeldAbvFlang_21,
-													   bbWeldAbvFlang_22,
-													   bbWeldBelwFlang_21, bbWeldBelwFlang_22, bbWeldBelwFlang_23,
-													   bbWeldBelwFlang_24,
-													   bbWeldSideWeb_21, bbWeldSideWeb_22,
-													   contWeldL1_U2, contWeldL2_U2, contWeldL1_L2, contWeldL2_L2,
-													   contWeldR1_U2, contWeldR2_U2, contWeldR1_L2, contWeldR2_L2,
-													   contWeldL1_U3, contWeldL1_L3, contWeldL2_U3,
-													   contWeldL2_L3, contWeldR1_U3, contWeldR1_L3, contWeldR2_U3,
-													   contWeldR2_L3, contWeldL1_U1, contWeldL1_L1, contWeldL2_U1,
-													   contWeldL2_L1, contWeldR1_U1, contWeldR1_L1, contWeldR2_U1,
-													   contWeldR2_L1,
-													   bcWeldStiffHL_1, bcWeldStiffHL_2, bcWeldStiffHR_1,
-													   bcWeldStiffHR_2,
-													   bcWeldStiffLL_1, bcWeldStiffLL_2, bcWeldStiffLR_1,
-													   bcWeldStiffLR_2,
-													   contPlate_L1, contPlate_L2, contPlate_R1,
-													   contPlate_R2, beam_stiffener_1, beam_stiffener_2, endplate_type,
+													   bbWeldAbvFlang,
+													   bbWeldBelwFlang,
+													   bbWeldSideWeb,
+													   contWeldD ,contWeldB,
+													   bcWeldStiffHeight,bcWeldStiffLength,
+													   contPlates,beam_stiffeners, endplate_type,
 													   conn_type, outputobj)
 
 				col_web_connectivity.create_3DModel()
@@ -2112,53 +2086,22 @@ class Maincontroller(QMainWindow):
 			else:  # Groove Weld
 
 				# else:
-				bcWeldFlang_1 = GrooveWeld(b=outputobj["Weld"]["Size"], h=float(beam_data["T"]),
-										   L=beam_B)
-				bcWeldFlang_2 = copy.copy(bcWeldFlang_1)
-
-				# Followings welds are welds placed aside of beam web, Qty = 4 			# edited length value by Anand Swaroop
-				bcWeldWeb_3 = GrooveWeld(b=outputobj["Weld"]["Size"], h=float(beam_data["tw"]),
-										 L=beam_d - 2 * beam_T)
 
 				#######################################
 				#       WELD SECTIONS QUARTER CONE    #
 				#######################################
 
 				col_web_connectivity = CADcolwebGroove(beam_Left, beam_Right, plate_Right, bbNutBoltArray,bolt,
-													   bcWeldFlang_1, bcWeldFlang_2, bcWeldWeb_3,
-													   bcWeldStiffHL_1, bcWeldStiffHL_2, bcWeldStiffHR_1,
-													   bcWeldStiffHR_2,
-													   bcWeldStiffLL_1, bcWeldStiffLL_2, bcWeldStiffLR_1,
-													   bcWeldStiffLR_2,
-													   contWeldL1_U2, contWeldL2_U2, contWeldL1_L2, contWeldL2_L2,
-													   contWeldR1_U2, contWeldR2_U2, contWeldR1_L2, contWeldR2_L2,
-													   contWeldL1_U3, contWeldL1_L3, contWeldL2_U3, contWeldL2_L3,
-													   contWeldR1_U3, contWeldR1_L3, contWeldR2_U3, contWeldR2_L3,
-													   contWeldL1_U1, contWeldL1_L1, contWeldL2_U1, contWeldL2_L1,
-													   contWeldR1_U1, contWeldR1_L1, contWeldR2_U1, contWeldR2_L1,
-													   contPlate_L1, contPlate_L2, contPlate_R1,
-													   contPlate_R2, beam_stiffener_1, beam_stiffener_2, endplate_type,
+													   bcWeldFlang, bcWeldWeb,
+													   bcWeldStiffHeight,bcWeldStiffLength,
+													   contWeldD ,contWeldB,
+													   contPlate_R2,beam_stiffeners, endplate_type,
 													   outputobj)
 
 				col_web_connectivity.create_3DModel()
 
 				return col_web_connectivity
 
-	#######################################
-	#       WELD SECTIONS QUARTER CONE    #
-	#######################################
-
-	# # Following weld cones are placed for Left beam
-
-	# extbothWays = CADFillet(beam_Left, beam_Right, plate_Right, bbNutBoltArray, bbWeldAbvFlang_21,
-	# 							   bbWeldAbvFlang_22,
-	# 							   bbWeldBelwFlang_21, bbWeldBelwFlang_22, bbWeldBelwFlang_23,
-	# 							   bbWeldBelwFlang_24,
-	# 							   bbWeldSideWeb_21, bbWeldSideWeb_22, bcWeldFlang_1, bcWeldFlang_2, bcWeldWeb_3, contPlate_L1, contPlate_L2, contPlate_R1,
-	# 							   contPlate_R2, endplate_type, weld_method)
-	# extbothWays.create_3DModel()
-	#
-	# return extbothWays
 
 	def bolt_head_thick_calculation(self, bolt_diameter):
 		'''
@@ -2301,212 +2244,212 @@ class Maincontroller(QMainWindow):
 		# Displays the beams #TODO ANAND
 		if component == "Column":
 			self.display.View_Iso()
-			osdag_display_shape(self.display, self.ExtObj.get_beamLModel(), update=True)
-		# osdag_display_shape(self.display, self.ExtObj.get_beamRModel(), update=True)  # , color = 'Dark Gray'
+			osdag_display_shape(self.display, self.ExtObj.beamLModel, update=True)
+		# osdag_display_shape(self.display, self.ExtObj.beamRModel, update=True)  # , color = 'Dark Gray'
 
 		elif component == "Beam":
 			self.display.View_Iso()
-			# osdag_display_shape(self.display, self.ExtObj.get_beamLModel(), update=True)
-			osdag_display_shape(self.display, self.ExtObj.get_beamRModel(), update=True)  # , color = 'Dark Gray'
+			# osdag_display_shape(self.display, self.ExtObj.beamLModel, update=True)
+			osdag_display_shape(self.display, self.ExtObj.beamRModel, update=True)  # , color = 'Dark Gray'
 
 		elif component == "Connector":
 			self.display.View_Iso()
 			# Displays the end plates
-			# osdag_display_shape(self.display, self.ExtObj.get_plateLModel(), update=True, color='Blue')
-			osdag_display_shape(self.display, self.ExtObj.get_plateRModel(), update=True, color='Blue')
+			# osdag_display_shape(self.display, self.ExtObj.plateLModel, update=True, color='Blue')
+			osdag_display_shape(self.display, self.ExtObj.plateRModel, update=True, color='Blue')
 
 			if conn_type == 'col_flange_connectivity':
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L1Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L2Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_R1Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_R2Model(), update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L1Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L2Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_R1Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_R2Model, update=True, color='Blue')
 
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_L1Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_L1Model, update=True, color='Red')
 
 			else:  # col_web_connectivity"
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L1Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L2Model(), update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L1Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L2Model, update=True, color='Blue')
 
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L1Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L1Model, update=True, color='Red')
 
 			# TODO: add if else statement for the type of endplate and also the number of bolts
 
 			if alist['Member']['EndPlate_type'] == "Extended both ways":
 				if numberOfBolts == 20:
-					osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_1Model(), update=True, color='Blue')
-					osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_2Model(), update=True,color='Blue')
+					osdag_display_shape(self.display, self.ExtObj.beam_stiffener_1Model, update=True, color='Blue')
+					osdag_display_shape(self.display, self.ExtObj.beam_stiffener_2Model, update=True,color='Blue')
 
 					#weld section for the above stiffeners
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHL_1Model(), update=True,olor='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHL_2Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHR_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHR_2Model(), update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHL_1Model, update=True,olor='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHL_2Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHR_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHR_2Model, update=True,color='Red')
 
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLL_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLL_2Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLR_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLR_2Model(), update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLL_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLL_2Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLR_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLR_2Model, update=True,color='Red')
 
 
 
 			elif alist['Member']['EndPlate_type'] == "Extended one way":
 				if numberOfBolts == 12:
-					osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_1Model(), update=True,color='Blue')
+					osdag_display_shape(self.display, self.ExtObj.beam_stiffener_1Model, update=True,color='Blue')
 
 					# weld section for the above stiffeners
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHL_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHR_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLL_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLR_1Model(), update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHL_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHR_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLL_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLR_1Model, update=True,color='Red')
 
 			else:  # alist['Member']['EndPlate_type'] == "Flush end plate":
 				pass
 
 			# Display all nut-bolts, call to nutBoltPlacement.py
-			nutboltlist = self.ExtObj.nut_bolt_array.get_models()
+			nutboltlist = self.ExtObj.get_nut_bolt_array.models()
 			for nutbolt in nutboltlist:
 				osdag_display_shape(self.display, nutbolt, color=Quantity_NOC_SADDLEBROWN, update=True)
 			# Display all the Welds including the quarter cone
 			# An object to save all input values entered by user
 			if alist["Weld"]["Method"] == "Fillet Weld":
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_21Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_22Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_21Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_22Model, update=True, color='Red')
 
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_21Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_22Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_23Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_24Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_21Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_22Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_23Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_24Model, update=True, color='Red')
 
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_21Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_22Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_21Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_22Model, update=True, color='Red')
 
 
 			else:  # Groove weld
 
-				osdag_display_shape(self.display, self.ExtObj.get_bcWeldFlang_1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bcWeldFlang_2Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bcWeldFlang_1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bcWeldFlang_2Model, update=True, color='Red')
 
-				osdag_display_shape(self.display, self.ExtObj.get_bcWeldWeb_3Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bcWeldWeb_3Model, update=True, color='Red')
 
 
 		elif component == "Model":
-			osdag_display_shape(self.display, self.ExtObj.get_beamLModel(), update=True)
-			osdag_display_shape(self.display, self.ExtObj.get_beamRModel(), update=True,
+			osdag_display_shape(self.display, self.ExtObj.beamLModel, update=True)
+			osdag_display_shape(self.display, self.ExtObj.beamRModel, update=True,
 								material=Graphic3d_NOT_2D_ALUMINUM)
 			# Displays the end plates
-			# osdag_display_shape(self.display, self.ExtObj.get_plateLModel(), update=True, color='Blue')
-			osdag_display_shape(self.display, self.ExtObj.get_plateRModel(), update=True, color='Blue')
+			# osdag_display_shape(self.display, self.ExtObj.plateLModel, update=True, color='Blue')
+			osdag_display_shape(self.display, self.ExtObj.plateRModel, update=True, color='Blue')
 
 			if conn_type == 'col_flange_connectivity':
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L1Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L2Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_R1Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_R2Model(), update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L1Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L2Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_R1Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_R2Model, update=True, color='Blue')
 
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR1_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldR2_L1Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR1_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldR2_L1Model, update=True, color='Red')
 
 
 			else:
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L1Model(), update=True, color='Blue')
-				osdag_display_shape(self.display, self.ExtObj.get_contPlate_L2Model(), update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L1Model, update=True, color='Blue')
+				osdag_display_shape(self.display, self.ExtObj.contPlate_L2Model, update=True, color='Blue')
 
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L2Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L3Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL1_L1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_U1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_contWeldL2_L1Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L2Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L3Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL1_L1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_U1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.contWeldL2_L1Model, update=True, color='Red')
 
 			# TODO: add if else statement for the type of endplate and also the number of bolts
 
 			if alist['Member']['EndPlate_type'] == "Extended both ways":
 				if numberOfBolts == 20:
-					osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_1Model(), update=True,color='Blue')
-					osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_2Model(), update=True,color='Blue')
+					osdag_display_shape(self.display, self.ExtObj.beam_stiffener_1Model, update=True,color='Blue')
+					osdag_display_shape(self.display, self.ExtObj.beam_stiffener_2Model, update=True,color='Blue')
 
 					# weld section for the above stiffeners
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHL_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHL_2Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHR_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHR_2Model(), update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHL_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHL_2Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHR_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHR_2Model, update=True,color='Red')
 
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLL_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLL_2Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLR_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLR_2Model(), update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLL_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLL_2Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLR_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLR_2Model, update=True,color='Red')
 
 			elif alist['Member']['EndPlate_type'] == "Extended one way":
 				if numberOfBolts == 12:
-					osdag_display_shape(self.display, self.ExtObj.get_beam_stiffener_1Model(), update=True,color='Blue')
+					osdag_display_shape(self.display, self.ExtObj.beam_stiffener_1Model, update=True,color='Blue')
 
 					# weld section for the above stiffeners
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHL_1Model(), update=True, color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffHR_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLL_1Model(), update=True,color='Red')
-					osdag_display_shape(self.display, self.ExtObj.get_bcWeldStiffLR_1Model(), update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHL_1Model, update=True, color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffHR_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLL_1Model, update=True,color='Red')
+					osdag_display_shape(self.display, self.ExtObj.bcWeldStiffLR_1Model, update=True,color='Red')
 
 
 			else:  # alist['Member']['EndPlate_type'] == "Flush end plate":
@@ -2521,24 +2464,24 @@ class Maincontroller(QMainWindow):
 
 			# An object to save all input values entered by user
 			if alist["Weld"]["Method"] == "Fillet Weld":
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_21Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldAbvFlang_22Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_21Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldAbvFlang_22Model, update=True, color='Red')
 
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_21Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_22Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_23Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldBelwFlang_24Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_21Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_22Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_23Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldBelwFlang_24Model, update=True, color='Red')
 
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_21Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bbWeldSideWeb_22Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_21Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bbWeldSideWeb_22Model, update=True, color='Red')
 
 
 			else:  # Groove weld
 
-				osdag_display_shape(self.display, self.ExtObj.get_bcWeldFlang_1Model(), update=True, color='Red')
-				osdag_display_shape(self.display, self.ExtObj.get_bcWeldFlang_2Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bcWeldFlang_1Model, update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bcWeldFlang_2Model, update=True, color='Red')
 
-				osdag_display_shape(self.display, self.ExtObj.get_bcWeldWeb_3Model(), update=True, color='Red')
+				osdag_display_shape(self.display, self.ExtObj.bcWeldWeb_3Model, update=True, color='Red')
 
 	# =================================================================================
 	def open_about_osdag(self):
