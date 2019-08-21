@@ -95,7 +95,7 @@ class DesignPreference(QDialog):
 		QDialog.__init__(self, parent)
 		self.ui = Ui_DesignPreferences()
 		self.ui.setupUi(self)
-		self.maincontroller = parent
+		self.maincontroller =parent
 
 		self.saved = None
 		self.ui.combo_design_method.model().item(1).setEnabled(False)
@@ -1774,6 +1774,9 @@ class Maincontroller(QMainWindow):
 					status = step_writer.Write(fName)
 
 					assert (status == IFSelect_RetDone)
+
+				# IFC file extension
+
 
 				else:
 					stl_writer = StlAPI_Writer()
