@@ -14,7 +14,7 @@ import subprocess
 import sys
 
 import cairosvg
-import ifcopenshell
+# import ifcopenshell
 import pdfkit
 from OCC import IGESControl, BRepTools
 from OCC.BRepAlgoAPI import BRepAlgoAPI_Fuse
@@ -27,7 +27,7 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.Qt import QColor, QBrush, Qt, QIntValidator, QDoubleValidator, QFile, QTextStream, pyqtSignal, QColorDialog, \
     QPixmap, QPalette
 from PyQt5.QtWidgets import QDialog, QApplication, QMainWindow, QFontDialog, QFileDialog
-from ifcopenshell import geom
+# from ifcopenshell import geom
 
 import bbExtendedEndPlateSpliceCalc as db_value
 from Connections.Component.ISection import ISection
@@ -38,8 +38,8 @@ from Connections.Component.nut import Nut
 from Connections.Component.plate import Plate
 from Connections.Component.stiffener_plate import StiffenerPlate
 from Connections.Moment.ExtendedEndPlate.bbExtendedEndPlateSpliceCalc import bbExtendedEndPlateSplice
-from Connections.Moment.ExtendedEndPlate.extendedBothWays import CADFillet
-from Connections.Moment.ExtendedEndPlate.extendedBothWays import CADGroove
+from Connections.Moment.ExtendedEndPlate.cadFile import CADFillet
+from Connections.Moment.ExtendedEndPlate.cadFile import CADGroove
 from Connections.Moment.ExtendedEndPlate.nutBoltPlacement import NutBoltArray
 from drawing_2D_BBFlush import FlushEndPlate
 from drawing_2D_ExtendedBothways import ExtendedEndPlate

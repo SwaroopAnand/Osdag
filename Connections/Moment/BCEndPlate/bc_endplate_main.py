@@ -47,10 +47,10 @@ from Connections.Component.groove_weld import GrooveWeld
 from Connections.Component.plate import Plate
 from Connections.Component.stiffener_plate import StiffenerPlate
 
-from Connections.Moment.BCEndPlate.extendedBothWays import CADFillet
-from Connections.Moment.BCEndPlate.extendedBothWays import CADGroove
-from Connections.Moment.BCEndPlate.extendedBothWays import CADColWebFillet
-from Connections.Moment.BCEndPlate.extendedBothWays import CADcolwebGroove
+from Connections.Moment.BCEndPlate.cadFile import CADFillet
+from Connections.Moment.BCEndPlate.cadFile import CADGroove
+from Connections.Moment.BCEndPlate.cadFile import CADColWebFillet
+from Connections.Moment.BCEndPlate.cadFile import CADcolwebGroove
 from Connections.Moment.BCEndPlate.nutBoltPlacement import NutBoltArray
 
 from Connections.Component.quarterCone import QuarterCone
