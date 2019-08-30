@@ -7,8 +7,8 @@ import numpy
 from Connections.Component.ModelUtils import getGpPt, makeEdgesFromPoints, makeWireFromEdges, makeFaceFromWire, makePrismFromFace
 
 
-from OCC.Display.SimpleGui import init_display
-display, start_display, add_menu, add_function_to_menu = init_display()
+# from OCC.Display.SimpleGui import init_display
+# display, start_display, add_menu, add_function_to_menu = init_display()
 
 class FilletWeld(object):
 
@@ -44,15 +44,15 @@ class FilletWeld(object):
         return prism
 
 
-b = 5
-h = 5
-L = 50
-
-channel = FilletWeld(b,h,L)
-# angles = channel.place()
-point = channel.compute_params()
-prism = channel.create_model()
-display.DisplayShape(prism, update=True)
-display.ExportToImage('./CAD_image.png')
-display.DisableAntiAliasing()
-start_display()
+# b = 5
+# h = 5
+# L = 50
+#
+# channel = FilletWeld(b,h,L)
+# # angles = channel.place()
+# point = channel.compute_params()
+# prism = channel.create_model()
+# display.DisplayShape(prism, update=True)
+# display.ExportToImage('./CAD_image.png')
+# display.DisableAntiAliasing()
+# start_display()
