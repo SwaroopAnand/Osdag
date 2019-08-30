@@ -1720,7 +1720,7 @@ class Maincontroller(QMainWindow):
 
                 # elif file_extension == 'brep':
 
-                    BRepTools.breptools.Write(shape, fName)
+                    # BRepTools.breptools.Write(shape, fName)
 
                 elif file_extension == 'stp':
                     # initialize the STEP exporter
@@ -2013,6 +2013,17 @@ class Maincontroller(QMainWindow):
         self.display.View_Iso()
         self.display.FitAll()
 
+
+############################################## Adding Different views #########################################
+        # if view3dModel = 'Front':
+        #     self.display.View_Front()
+        # elif view3dModel = 'Side':
+        #     self.display.View_Right()
+        # elif view3dModel = 'Top' :
+        #     self.display.View_Top()
+        # else:
+        #     self.display.View_Iso()
+
         alist = self.designParameters()
 
         self.display.DisableAntiAliasing()
@@ -2258,7 +2269,22 @@ class Maincontroller(QMainWindow):
                 #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffH_4Model, update=True, color='Red')
                 #  osdag_display_shape(self.display, self.ExtObj.bbWeldStiffL_4Model, update=True, color='Red')
 
-    # =================================================================================
+
+############################# viewing different components #####################################################
+
+        # elif component = " nuts and Bolts" :
+        #     pass
+        # elif component = " Fillet weld":
+        #     pass
+        # elif component = "Groove Weld" :
+        #     pass
+        # elif component = "Stiffeners"
+        #     pass
+        #
+        # elif component = "plates":
+        #     pass
+
+# =================================================================================
     def open_about_osdag(self):
         dialog = MyAboutOsdag(self)
         dialog.show()

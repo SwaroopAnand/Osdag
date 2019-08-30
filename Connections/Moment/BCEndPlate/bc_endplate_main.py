@@ -298,7 +298,7 @@ class Stiffener(QDialog):
 		self.ui.txt_stiffnrThickness.setText(str(resultObj_plate["Stiffener"]["Thickness"]))
 		self.ui.txt_stiffnrNotchAtTop.setText(str(resultObj_plate['Stiffener']['NotchTop']))
 		self.ui.txt_stiffnrNotchAtBottom.setText(str(resultObj_plate['Stiffener']['NotchBottom']))
-		self.ui.txt_stiffnrWeldSize.setText(str(resultObj_plate['Stiffener']['Weld']))
+		self.ui.txt_stiffnrWeldSize.setText(str(resultObj_plate['Stiffener']['Weld']))n
 
 
 class Pitch(QDialog):

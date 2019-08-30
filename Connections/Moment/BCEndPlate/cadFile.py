@@ -4,11 +4,10 @@ Commenced on 24-04-2019
 @author: Anand Swaroop
 """""
 
-import numpy
 import copy
+
+import numpy
 from OCC.BRepAlgoAPI import BRepAlgoAPI_Cut
-
-
 
 
 class CADFillet(object):
