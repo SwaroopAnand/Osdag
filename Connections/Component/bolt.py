@@ -93,17 +93,19 @@ a4  X                   XXXXXXXXXXXXXXXXX  a1
         return whole_Bolt
 
 
-# R = 20
-# T = 4
-# H = 30
-# r = 5
+# R = 10
+# T = 5
+# H = 25
+# r = 4
+#
+# origin = numpy.array([0.,0.,0.])
+# uDir = numpy.array([1.,0.,0.])
+# shaftDir = numpy.array([0.,0.,1.])
 #
 # channel = Bolt(R,T,H,r)
-# angles = channel.getPoint()
+# angles = channel.place(origin, uDir, shaftDir)
 # point = channel.compute_params()
 # prism = channel.create_model()
 # display.DisplayShape(prism, update=True)
-# display.ExportToImage('./CAD_image.png')
 # display.DisableAntiAliasing()
 # start_display()
-

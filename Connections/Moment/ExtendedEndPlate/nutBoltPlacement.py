@@ -20,6 +20,7 @@ class NutBoltArray(object):
         :param bolt: Required bolt dimensions
         :param numberOfBolts: Required number of bolts
         :param nut_space: Gap between bolt head and nut
+        :param alist: Input dictionary
         """
         self.origin = None
         self.gaugeDir = None
@@ -545,17 +546,30 @@ class NutBoltArray(object):
                                    -boltDir)  # gap here is between bolt head and nut
 
     def create_model(self):
+        """
+
+        :return: cad model of nut bolt arrangement
+        """
         for bolt in self.bolts:
             self.models.append(bolt.create_model())
 
         for nut in self.nuts:
             self.models.append(nut.create_model())
 
-        dbg = self.dbgSphere(self.origin)
+        dbg = self.dbgSphere(self.origin)                           #TODO : know why sphere is appended to the model (by Anand Swaroop)
         self.models.append(dbg)
 
     def dbgSphere(self, pt):
+        """
+        TODO : know why sphere is appended to the model, if no reason than remove sphere from all the cad files (by Anand Swaroop)
+        :param pt: pt of origin for the nut bol placement
+        :return: returns the sphere
+        """
         return BRepPrimAPI_MakeSphere(getGpPt(pt), 0.1).Shape()
 
     def get_models(self):
+        """
+
+        :return: cad model for nut and bolt arrangement
+        """
         return self.models
